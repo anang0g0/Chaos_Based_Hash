@@ -38,6 +38,7 @@ typedef struct {
 
 typedef struct aN {
   unsigned char ar[NN];
+  //
 } arrayn;
 
 typedef struct pub {
@@ -313,15 +314,16 @@ time_t t;
 	}
 	k=0;
 
-
 	for(j=0;j<8;j++){
 	for(i=0;i<256;i++)
 	  z[i]=x0[x1[inv_x[i]]];
 	for(i=0;i<256;i++)
 	  x1[i]=z[i];
-	}
+
 	for(i=0;i<256;i++)
 	  m[i]^=b[x1[i]];
+	}
+	
 	
 	    //gf[mlt(fg[4],mlt(fg[b[z[i]]],fg[255^b[z[i]]]))]|5*(b[z[i]]^b[z[(i+1)%NN]]);
 	    //
