@@ -322,7 +322,7 @@ time_t t;
 	}
 	for(i=0;i<256;i++)
 	  m[i]^=b[x1[i]];
-	   
+	
 	    //gf[mlt(fg[4],mlt(fg[b[z[i]]],fg[255^b[z[i]]]))]|5*(b[z[i]]^b[z[(i+1)%NN]]);
 	    //
 	//   
@@ -349,7 +349,7 @@ return n;
 array16 hash(int argc,char *argv[]){
   int i,j,k,n;
   array16 h={0};
-  //  arrayull buf;
+    
   unsigned char buf[256]={0};
   FILE *fp;
   arrayn a={0},b={0};
@@ -378,14 +378,35 @@ array16 hash(int argc,char *argv[]){
 	}
 	}
       */
-      
       for(i=0;i<16;i++){
 	for(j=0;j<4;j++){
-	  h.h[i]^=a.ar[i*4+j];
+	h.h[i]^=a.ar[i*4+j];
 	  if(j!=3)
 	    h.h[i]=(h.h[i]<<8);
 	}
       }
+      for(i=16;i<32;i++){
+	for(j=0;j<4;j++){
+	h.h[i-16]^=a.ar[i*4+j];
+	  if(j!=3)
+	    h.h[i-16]=(h.h[i-16]<<8);
+	}
+      }
+      for(i=32;i<48;i++){
+	for(j=0;j<4;j++){
+	h.h[i-32]^=a.ar[i*4+j];
+	  if(j!=3)
+	    h.h[i-32]=(h.h[i-32]<<8);
+	}
+      }
+      for(i=48;i<64;i++){
+	for(j=0;j<4;j++){
+	h.h[i-48]^=a.ar[i*4+j];
+	  if(j!=3)
+	    h.h[i-48]=(h.h[i-48]<<8);
+	}
+      }
+
       //      fwrite(h.h,4,16,fp);
     }
     
@@ -417,6 +438,7 @@ array16 hash(int argc,char *argv[]){
       n++;
     }
   }
+
   return h;
 }
 
