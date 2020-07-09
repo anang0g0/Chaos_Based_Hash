@@ -2,6 +2,8 @@
 #include <time.h>
 #include <stdlib.h>
 #include <string.h>
+#include <omp.h>
+
 
 #define N 256
 #define NN 256
@@ -283,7 +285,6 @@ arrayn chash(unsigned char b[256]){
 int i,j=0;
  arrayn n;
 
-
  unsigned char salt[256]; //={ 148, 246, 52, 251, 16, 194, 72, 150, 249, 23, 90, 107, 151, 42, 154, 124, 48, 58, 30, 24, 42, 33, 38, 10, 115, 41, 164, 16, 33, 32, 252, 143, 86, 175, 8, 132, 103, 231, 95, 190, 61, 29, 215, 75, 251, 248, 72, 48, 224, 200, 147, 93, 112, 25, 227, 223, 206, 137, 51, 88, 109, 214, 17, 172};
 
  unsigned char z[NN],w[NN];
@@ -321,7 +322,7 @@ time_t t;
 	}
 	for(i=0;i<256;i++)
 	  m[i]^=b[x1[i]];
-	    
+	   
 	    //gf[mlt(fg[4],mlt(fg[b[z[i]]],fg[255^b[z[i]]]))]|5*(b[z[i]]^b[z[(i+1)%NN]]);
 	    //
 	//   
@@ -444,7 +445,8 @@ arrayul crand(unsigned char u[NN]){
   arrayul p;
   array16 t;
 
-  if(BYTE) {    
+  if(BYTE) {
+
         /*
     for(i=0;i<256;i++)
       password[i]=rand()%256;
