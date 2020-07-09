@@ -388,22 +388,22 @@ array16 hash(int argc,char *argv[]){
       for(i=16;i<32;i++){
 	for(j=0;j<4;j++){
 	h.h[i-16]^=a.ar[i*4+j];
-	  if(j!=3)
-	    h.h[i-16]=(h.h[i-16]<<8);
+	//if(j!=3)
+	//  h.h[i-16]=(h.h[i-16]<<8);
 	}
       }
       for(i=32;i<48;i++){
 	for(j=0;j<4;j++){
 	h.h[i-32]^=a.ar[i*4+j];
-	  if(j!=3)
-	    h.h[i-32]=(h.h[i-32]<<8);
+	//if(j!=3)
+	//  h.h[i-32]=(h.h[i-32]<<8);
 	}
       }
       for(i=48;i<64;i++){
 	for(j=0;j<4;j++){
 	h.h[i-48]^=a.ar[i*4+j];
-	  if(j!=3)
-	    h.h[i-48]=(h.h[i-48]<<8);
+	//if(j!=3)
+	//  h.h[i-48]=(h.h[i-48]<<8);
 	}
       }
 
