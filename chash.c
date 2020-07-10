@@ -331,28 +331,11 @@ time_t t;
 	for(i=0;i<256;i++)
 	  b[i]^=Sbox[ROTL8(b[x1[i]],3)];
 	    //gf[mlt(fg[4],mlt(fg[b[z[i]]],fg[255^b[z[i]]]))]|5*(b[z[i]]^b[z[(i+1)%NN]]);
-	    //
-	    //
-	/*
-	for(i=0;i<256;i++)
-	  printf("%d,",b[i]);
-	printf("\n");
-	*/
+
 	}
 	
 	
-	
-	    //
-	    //
-	//   
-		  	  
-	/*
-	for(i=0;i<256;i++){
-	  b[i]^=m[i];
-	  //printf("%d\n",b[i]);
-	}
-	*/
-	
+		  	  	
 	for(i=0;i<256;i++){
 	  n.ar[i]=b[i];
 	  //printf("%x\n",n.ar[i]);
