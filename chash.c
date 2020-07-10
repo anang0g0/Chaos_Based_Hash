@@ -274,6 +274,7 @@ arrayn chash(unsigned char b[256]){
     inv_x[x0[i]]=i;
     //inv_y[tt[i]]=i;
   }
+#pragma omp parallel for
   for(i=0;i<256;i++){
     b[i]^=salt[i];
     
@@ -337,6 +338,7 @@ array16 hash(int argc,char *argv[]){
 	}
       */
       for(k=0;k<4;k++){
+	#pragma omp parallel for
 	for(i=64*k;i<64*k+64;i++){
 	  h.c[i-64*k]^=a.ar[i];
 	}
