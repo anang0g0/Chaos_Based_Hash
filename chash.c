@@ -7,9 +7,8 @@
 
 #define N 256
 #define NN 256
-#define M 256
 #define BYTE 1 //1=hashfile,0=dumpdata
-#define NB 4                          /* 128bit 固定として規格されている(データの長さ) */
+#define NB 4   /* 128bit 固定として規格されている(データの長さ) */
 #define NBb 16
 
 
@@ -285,22 +284,19 @@ arrayn chash(unsigned char b[256]){
   for(j=0;j<8;j++){
     for(i=0;i<256;i++)
       z[i]=x0[x1[inv_x[i]]];
-    for(i=0;i<256;i++)
-      x1[i]=z[i];
+    
+    memcpy(x1,z,sizeof(unsigned char)*256);
     
     for(i=0;i<256;i++){
       if(b[x1[i]]>0)
 	b[i]^=Sbox[ROTL8(b[x1[i]],3)];
-      //gf[mlt(fg[4],mlt(fg[b[z[i]]],fg[255^b[z[i]]]))]|5*(b[z[i]]^b[z[(i+1)%NN]]);
     }
   }
   
   
-  for(i=0;i<256;i++){
-    n.ar[i]=b[i];
+     memcpy(n.ar,b,sizeof(unsigned char)*256);
     //printf("%x\n",n.ar[i]);
-  }
-  
+
   
   return n;
   
