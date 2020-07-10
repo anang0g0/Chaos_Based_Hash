@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define N 32
+#define N 64
 #define MAX 4
 
 short x[5][N];
@@ -14,7 +14,7 @@ void mkcycle(){
   int i,j,r,rr,vv,pko,flg,flg2,l,n,ll,jj,flg3,cnt2,v,cnt3=0,ii;
   unsigned short cnt,k,count=0,kk,count2=0;;
   
-  unsigned char p[43]={/*2,*/3,5,7,/*11,13,*/17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97,101,103,107,109,113,127,131,137,149,151,157,163,167,173,179,181,191,193};
+  unsigned char p[43]={2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97,101,103,107,109,113,127,131,137,149,151,157,163,167,173,179,181,191,193};
   //{2,13,17};
   n=0;
   for(i=0;i<MAX;i++)
@@ -346,14 +346,25 @@ void table(short a[N]){
 
 
 void main(){
-  short inv_X[N],A[N],X[N],tmp[N],X1[N],X2[N];
+  unsigned char inv_X[N],A[N],X[N],tmp[N],X1[N],X2[N];
   int i,j;
   short B[N],C[N],C1[N],C2[N],CC[N],C3[N],C4[N],Z[N],D[N];
   unsigned long long int a,b,r,a2;
   
-    mkcycle();
+  //mkcycle();
+  random_permutation(X);
+  random_permutation(X1);
+  for(i=0;i<N;i++)
+    printf("%d,",X[i]);
+  printf("\n");
+  for(i=0;i<N;i++)
+    printf("%d,",X1[i]);
+  printf("\n");
   
+  exit(1);
 
+  
+  
   for(i=0;i<N;i++)
     inv_X[x[0][i]]=i;
 
