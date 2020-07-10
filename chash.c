@@ -292,60 +292,59 @@ int mltn(int n,int x){
 
 
 arrayn chash(unsigned char b[256]){
-int i,j=0;
- arrayn n;
-
- unsigned char salt[256]; //={ 148, 246, 52, 251, 16, 194, 72, 150, 249, 23, 90, 107, 151, 42, 154, 124, 48, 58, 30, 24, 42, 33, 38, 10, 115, 41, 164, 16, 33, 32, 252, 143, 86, 175, 8, 132, 103, 231, 95, 190, 61, 29, 215, 75, 251, 248, 72, 48, 224, 200, 147, 93, 112, 25, 227, 223, 206, 137, 51, 88, 109, 214, 17, 172};
-
- unsigned char z[NN],w[NN];
- unsigned char v[256]={0},g[NN]={0},f[32]={0};
- unsigned char inv_x[NN],inv_y[NN];
- unsigned char s[NN]={4,34,41,33,53,1,59,55,62,24,61,13,39,48,29,0,51,23,2,49,32,17,19,42,50,8,43,46,63,44,57,16,47,18,36,31,38,27,30,58,3,45,11,7,35,52,15,22,12,26,56,60,10,5,40,54,25,14,20,21,37,6,28,9};;
- unsigned char tt[NN]={15,2,48,46,30,7,13,3,29,33,1,26,25,34,17,0,41,27,31,16,61,50,55,56,44,19,62,60,22,4,12,9,38,52,42,10,58,36,28,63,37,51,47,59,40,53,45,11,39,24,18,6,20,21,14,49,23,35,8,43,54,57,32,5};
-unsigned char x2[256]={0};
-	FILE *fp,*op;
-	int c,count;
-time_t t;
- int k;
-
- 
- for(i=0;i<256;i++)	
-   salt[i]=xor64();
-
-	for(i=0;i<256;i++){
-		inv_x[x0[i]]=i;
-		//inv_y[tt[i]]=i;
-	}
-	for(i=0;i<256;i++){
-	b[i]^=salt[i];
-
-	  //	  b[i+NN/2]=111;
-	}
-	k=0;
-
-	for(j=0;j<8;j++){
-	for(i=0;i<256;i++)
-	  z[i]=x0[x1[inv_x[i]]];
-	for(i=0;i<256;i++)
-	  x1[i]=z[i];
-	
-	for(i=0;i<256;i++){
-	  if(b[x1[i]]>0)
-	  b[i]^=Sbox[ROTL8(b[x1[i]],3)];
-	    //gf[mlt(fg[4],mlt(fg[b[z[i]]],fg[255^b[z[i]]]))]|5*(b[z[i]]^b[z[(i+1)%NN]]);
-	}
-	}
-	
-	
-		  	  	
-	for(i=0;i<256;i++){
-	  n.ar[i]=b[i];
-	  //printf("%x\n",n.ar[i]);
-	}
-
-
-return n;
-
+  int i,j=0;
+  arrayn n;
+  
+  unsigned char salt[256]; //={ 148, 246, 52, 251, 16, 194, 72, 150, 249, 23, 90, 107, 151, 42, 154, 124, 48, 58, 30, 24, 42, 33, 38, 10, 115, 41, 164, 16, 33, 32, 252, 143, 86, 175, 8, 132, 103, 231, 95, 190, 61, 29, 215, 75, 251, 248, 72, 48, 224, 200, 147, 93, 112, 25, 227, 223, 206, 137, 51, 88, 109, 214, 17, 172};
+  
+  unsigned char z[NN],w[NN];
+  unsigned char v[256]={0},g[NN]={0},f[32]={0};
+  unsigned char inv_x[NN],inv_y[NN];
+  unsigned char s[NN]={4,34,41,33,53,1,59,55,62,24,61,13,39,48,29,0,51,23,2,49,32,17,19,42,50,8,43,46,63,44,57,16,47,18,36,31,38,27,30,58,3,45,11,7,35,52,15,22,12,26,56,60,10,5,40,54,25,14,20,21,37,6,28,9};;
+  unsigned char tt[NN]={15,2,48,46,30,7,13,3,29,33,1,26,25,34,17,0,41,27,31,16,61,50,55,56,44,19,62,60,22,4,12,9,38,52,42,10,58,36,28,63,37,51,47,59,40,53,45,11,39,24,18,6,20,21,14,49,23,35,8,43,54,57,32,5};
+  unsigned char x2[256]={0};
+  FILE *fp,*op;
+  int c,count;
+  time_t t;
+  int k;
+  
+  
+  for(i=0;i<256;i++)	
+    salt[i]=xor64();
+  
+  for(i=0;i<256;i++){
+    inv_x[x0[i]]=i;
+    //inv_y[tt[i]]=i;
+  }
+  for(i=0;i<256;i++){
+    b[i]^=salt[i];
+    
+    //	  b[i+NN/2]=111;
+  }
+  k=0;
+  
+  for(j=0;j<8;j++){
+    for(i=0;i<256;i++)
+      z[i]=x0[x1[inv_x[i]]];
+    for(i=0;i<256;i++)
+      x1[i]=z[i];
+    
+    for(i=0;i<256;i++){
+      if(b[x1[i]]>0)
+	b[i]^=Sbox[ROTL8(b[x1[i]],3)];
+      //gf[mlt(fg[4],mlt(fg[b[z[i]]],fg[255^b[z[i]]]))]|5*(b[z[i]]^b[z[(i+1)%NN]]);
+    }
+  }
+  
+  
+  for(i=0;i<256;i++){
+    n.ar[i]=b[i];
+    //printf("%x\n",n.ar[i]);
+  }
+  
+  
+  return n;
+  
 }
 
 
@@ -353,7 +352,7 @@ return n;
 array16 hash(int argc,char *argv[]){
   int i,j,k,n;
   array16 h={0};
-    
+  
   unsigned char buf[256]={0};
   FILE *fp;
   arrayn a={0},b={0};
@@ -361,7 +360,7 @@ array16 hash(int argc,char *argv[]){
   
   
   if(BYTE){
-
+    
     fp=fopen(argv[1],"rb");
     if(fp==NULL){
       printf("no file\n");
@@ -373,8 +372,8 @@ array16 hash(int argc,char *argv[]){
       n=0;
       a=chash(buf);
       /*
-      for(j=0;j<4;j++){
-      for(i=j*64;i<j*64+64;i++){
+	for(j=0;j<4;j++){
+	for(i=j*64;i<j*64+64;i++){
 	buf2[i]=buf.d[i];
 	a=chash(buf2);
 	for(k=0;k<64;k++)
@@ -382,10 +381,10 @@ array16 hash(int argc,char *argv[]){
 	}
 	}
       */
-
+      
       for(i=0;i<16;i++){
 	for(j=0;j<4;j++){
-	h.c[i*4+j]^=a.ar[i*4+j];
+	  h.c[i*4+j]^=a.ar[i*4+j];
 	}
       }
       
@@ -412,12 +411,12 @@ array16 hash(int argc,char *argv[]){
     
     fp=fopen("test.bin","wb");
     /*
-    for(i=0;i<NN;i++)
+      for(i=0;i<NN;i++)
       buf[i]=rand()%256;
-    printf("input number! ->");
-    scanf("%d",&n);
-    buf[0]^=n;
-    printf("%d\n",buf[0]);
+      printf("input number! ->");
+      scanf("%d",&n);
+      buf[0]^=n;
+      printf("%d\n",buf[0]);
     */
     memset(h.h,0,sizeof(h.h));
     n=0;
@@ -436,7 +435,7 @@ array16 hash(int argc,char *argv[]){
       n++;
     }
   }
-
+  
   return h;
 }
 
