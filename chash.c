@@ -32,8 +32,9 @@ typedef struct a8 {
   unsigned char ar[8];
 } array8;
 
-typedef struct {
+typedef union {
   unsigned int h[16];
+  unsigned char c[64];
 } array16;
 
 typedef struct aN {
@@ -315,14 +316,14 @@ time_t t;
 		inv_x[x0[i]]=i;
 		//inv_y[tt[i]]=i;
 	}
-	//for(i=0;i<256;i++){
-	//b[i]^=salt[i];
+	for(i=0;i<256;i++){
+	b[i]^=salt[i];
 
 	  //	  b[i+NN/2]=111;
-	//}
+	}
 	k=0;
 
-	for(j=0;j<16;j++){
+	for(j=0;j<8;j++){
 	for(i=0;i<256;i++)
 	  z[i]=x0[x1[inv_x[i]]];
 	for(i=0;i<256;i++)
@@ -380,36 +381,29 @@ array16 hash(int argc,char *argv[]){
 	}
 	}
       */
+
       for(i=0;i<16;i++){
 	for(j=0;j<4;j++){
-	h.h[i]^=a.ar[i*4+j];
-	  if(j!=3)
-	    h.h[i]=(h.h[i]<<8);
+	h.c[i*4+j]^=a.ar[i*4+j];
 	}
       }
-      /*
+      
       for(i=16;i<32;i++){
 	for(j=0;j<4;j++){
-	h.h[i-16]^=a.ar[i*4+j];
-	//if(j!=3)
-	//  h.h[i-16]=(h.h[i-16]<<8);
+	  h.c[(i-16)*4+j]^=a.ar[i*4+j];
 	}
       }
       for(i=32;i<48;i++){
 	for(j=0;j<4;j++){
-	h.h[i-32]^=a.ar[i*4+j];
-	//if(j!=3)
-	//  h.h[i-32]=(h.h[i-32]<<8);
+	  h.c[(i-32)*4+j]^=a.ar[i*4+j];
 	}
       }
       for(i=48;i<64;i++){
 	for(j=0;j<4;j++){
-	h.h[i-48]^=a.ar[i*4+j];
-	//if(j!=3)
-	//  h.h[i-48]=(h.h[i-48]<<8);
+	  h.c[(i-48)*4+j]^=a.ar[i*4+j];
 	}
       }
-      */
+      
       //      fwrite(h.h,4,16,fp);
     }
     
