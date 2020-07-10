@@ -295,11 +295,11 @@ arrayn chash(unsigned char b[NN]){
   for(i=0;i<NN;i++)
   b[i]^=salt[i];
     
-    //	  b[i+NN/2]=111;
-  //}
+
+
   k=0;
   
-  for(j=0;j<8;j++){
+    for(j=0;j<4;j++){
     for(i=0;i<NN;i++)
       z[i]=x0[x1[inv_x[i]]];
     
@@ -314,7 +314,7 @@ arrayn chash(unsigned char b[NN]){
       printf("%d,",b[i]);
     printf("\n");
     */
-  }
+    }
   //    exit(1);
   
      memcpy(n.ar,b,sizeof(unsigned char)*NN);
