@@ -336,26 +336,9 @@ array16 hash(int argc,char *argv[]){
 	}
 	}
       */
-      
-      for(i=0;i<16;i++){
-	for(j=0;j<4;j++){
-	  h.c[i*4+j]^=a.ar[i*4+j];
-	}
-      }
-      
-      for(i=16;i<32;i++){
-	for(j=0;j<4;j++){
-	  h.c[(i-16)*4+j]^=a.ar[i*4+j];
-	}
-      }
-      for(i=32;i<48;i++){
-	for(j=0;j<4;j++){
-	  h.c[(i-32)*4+j]^=a.ar[i*4+j];
-	}
-      }
-      for(i=48;i<64;i++){
-	for(j=0;j<4;j++){
-	  h.c[(i-48)*4+j]^=a.ar[i*4+j];
+      for(k=0;k<4;k++){
+	for(i=64*k;i<64*k+64;i++){
+	  h.c[i-64*k]^=a.ar[i];
 	}
       }
       
