@@ -329,10 +329,11 @@ time_t t;
 	for(i=0;i<256;i++)
 	  x1[i]=z[i];
 	
-	for(i=0;i<256;i++)
+	for(i=0;i<256;i++){
+	  if(b[x1[i]]>0)
 	  b[i]^=Sbox[ROTL8(b[x1[i]],3)];
 	    //gf[mlt(fg[4],mlt(fg[b[z[i]]],fg[255^b[z[i]]]))]|5*(b[z[i]]^b[z[(i+1)%NN]]);
-
+	}
 	}
 	
 	
