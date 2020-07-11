@@ -332,16 +332,8 @@ arrayn chash(unsigned char b[2048]){
     }    
     
   }
-  /*
-    for(i=0;i<NN;i++)
-    printf("%d,",b[i]);
-    printf("\n");
-  */
-  
-  //    exit(1);
   
   memcpy(n.ar,f,sizeof(unsigned char)*NN);
-  //printf("%x\n",n.ar[i]);
   
   
   return n;
