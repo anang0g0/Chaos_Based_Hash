@@ -310,7 +310,8 @@ arrayn chash(unsigned char b[2048]){
 
     for(i=0;i<NN;i++){
       if(f[x1[i]]>0)
-	f[i]^=Sbox[ROTL8(f[x1[i]],3)];
+	v[i]=Sbox[ROTL8(f[x1[i]],3)];
+      f[i]^=v[i];
     }
     
     for(k=1;k<2048/NN;k++){
