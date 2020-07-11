@@ -282,32 +282,32 @@ arrayn chash(unsigned char b[2048]){
 
   for(i=0;i<NN;i++)	
     salt[i]=xor64();
-    
-    for(i=0;i<NN;i++){
+  
+  for(i=0;i<NN;i++){
     inv_x[x0[i]]=i;
     //inv_y[tt[i]]=i;
   }
   
-    //for(i=0;i<NN;i++)
-     //  printf("%d,",inv_x[i]);
-   //  exit(1);
+  //for(i=0;i<NN;i++)
+  //  printf("%d,",inv_x[i]);
+  //  exit(1);
    
   
   //#pragma omp parallel for
   for(i=0;i<NN;i++)
     f[i]^=salt[i];
-    
-
-  k=0;
-      for(i=0;i<256;i++)
-	f[i]^=b[i];
   
-    for(j=0;j<10;j++){
+  
+  k=0;
+  for(i=0;i<256;i++)
+    f[i]^=b[i];
+  
+  for(j=0;j<10;j++){
     for(i=0;i<NN;i++)
       z[i]=x0[x1[inv_x[i]]];
     
     memcpy(x1,z,sizeof(unsigned char)*NN);
-
+    
     for(i=0;i<NN;i++){
       if(f[x1[i]]>0)
 	v[i]=Sbox[ROTL8(f[x1[i]],3)];
@@ -321,18 +321,18 @@ arrayn chash(unsigned char b[2048]){
 	f[i]^=b[k*NN+i];
     }    
     
-    }
-    /*
+  }
+  /*
     for(i=0;i<NN;i++)
-      printf("%d,",b[i]);
+    printf("%d,",b[i]);
     printf("\n");
-    */
-    
+  */
+  
   //    exit(1);
   
-     memcpy(n.ar,f,sizeof(unsigned char)*NN);
-    //printf("%x\n",n.ar[i]);
-
+  memcpy(n.ar,f,sizeof(unsigned char)*NN);
+  //printf("%x\n",n.ar[i]);
+  
   
   return n;
   
