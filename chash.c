@@ -313,9 +313,10 @@ chash (unsigned char b[2048])
 	  count++;
 	}
       /*
+      //今のところ何もしないでかき回すだけ
       //padding?
       if(count>=2048/NN)
-	memcpy(f,w,sizeof(unsigned char)*NN);
+      　　memcpy(f,w,sizeof(unsigned char)*NN);
       */
     }
 
