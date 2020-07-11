@@ -300,7 +300,7 @@ arrayn chash(unsigned char b[2048]){
 
   k=0;
       for(i=0;i<256;i++)
-	f[i]=b[i];
+	f[i]^=b[i];
   
     for(j=0;j<6;j++){
     for(i=0;i<NN;i++)
