@@ -275,7 +275,7 @@ arrayn chash(unsigned char b[2048]){
   unsigned char v[256]={0},g[NN]={0},f[NN]={0};
   unsigned char inv_y[NN];
   FILE *fp,*op;
-  int c,count;
+  int c,count=1;
   time_t t;
   int k;
   
@@ -294,15 +294,15 @@ arrayn chash(unsigned char b[2048]){
    
   
   //#pragma omp parallel for
-  for(i=0;i<NN;i++)
-    f[i]^=salt[i];
+  //for(i=0;i<NN;i++)
+  //f[i]^=salt[i];
   
   
   k=0;
   for(i=0;i<256;i++)
     f[i]^=b[i];
   
-  for(j=0;j<8;j++){
+  for(j=0;j<12;j++){
     for(i=0;i<NN;i++)
       z[i]=x0[x1[inv_x[i]]];
     
@@ -315,18 +315,17 @@ arrayn chash(unsigned char b[2048]){
       }
     }
     memcpy(f,v,sizeof(unsigned char)*NN);
-
-    /*
-    for(i=0;i<NN;i++){
-      //f[i]^=v[i];
+    
+    /*  
+    for(i=0;i<NN;i++)
       printf("%d,",f[i]);
-    }
     printf("\n");
     */
     
-    for(k=1;k<2048/NN;k++){
+    while(count<2048/NN){ //k=1;k<2048/NN;k++){
       for(i=0;i<256;i++)
-	f[i]^=b[k*NN+i];
+	f[i]^=b[count*NN+i];
+      count++;
     }    
     
   }
