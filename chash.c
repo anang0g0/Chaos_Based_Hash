@@ -68,11 +68,6 @@ unsigned char inv_x[NN]={0};
 unsigned char x1[NN]={98,73,0,170,16,80,100,30,147,191,47,254,22,253,242,103,112,44,69,48,28,174,173,182,188,18,150,138,66,61,207,208,78,59,169,51,158,246,202,45,247,178,71,104,134,62,228,34,243,237,109,221,9,49,143,41,46,235,36,154,42,99,159,67,166,233,17,107,232,43,250,121,40,146,25,126,92,95,190,94,195,139,115,87,50,205,111,11,140,211,251,157,142,239,131,176,217,93,118,97,153,74,210,21,76,123,83,68,227,196,238,105,187,72,206,135,35,96,161,129,116,75,244,130,219,171,226,117,149,252,3,214,55,29,33,113,119,223,194,127,165,151,15,26,7,91,32,125,200,180,199,90,183,163,24,88,5,230,212,229,204,175,8,77,241,240,155,201,85,2,137,198,162,58,63,31,60,255,10,101,193,248,197,12,133,79,164,23,38,222,168,6,102,203,13,56,81,1,19,53,220,231,64,124,145,136,160,128,89,172,234,225,144,189,132,110,167,224,152,82,114,70,209,122,213,86,156,245,216,184,192,148,84,186,141,54,27,249,181,177,65,39,218,20,120,185,215,4,14,108,236,179,106,37,57,52};
 
 //unsigned char x1[NN]={33,37,25,9,5,35,41,57,53,19,61,8,0,31,47,60,46,54,26,32,44,36,14,48,58,59,38,22,6,16,51,56,4,13,23,42,24,39,2,50,1,15,30,45,34,20,21,28,12,29,17,27,10,55,52,7,63,43,18,40,49,11,62,3};
-  //
-  //
-  //
-  //
-//  
 
 unsigned char x[5][NN];
 unsigned char message[4]={0};
@@ -84,7 +79,7 @@ unsigned char message[4]={0};
 unsigned char password[password_length + 1];
 
 
-
+//AES S-box
 unsigned char Sbox[256]={
   0x63,0x7c,0x77,0x7b,0xf2,0x6b,0x6f,0xc5,0x30,0x01,0x67,0x2b,0xfe,0xd7,0xab,0x76,
   0xca,0x82,0xc9,0x7d,0xfa,0x59,0x47,0xf0,0xad,0xd4,0xa2,0xaf,0x9c,0xa4,0x72,0xc0,
@@ -125,88 +120,6 @@ unsigned char invSbox[256]={
   0x17,0x2b,0x04,0x7e,0xba,0x77,0xd6,0x26,0xe1,0x69,0x14,0x63,0x55,0x21,0x0c,0x7d
 };
 
-
-int dataget(void* data,int n)
-{
-  return(((unsigned char*)data)[n]);
-}
-
-
-int mul(int dt,int n)
-{
-  int i,x=0;
-  for(i=8;i>0;i>>=1)
-  {
-    x <<= 1;
-    if(x&0x100)
-      x = (x ^ 0x1b) & 0xff;
-    if((n & i))
-      x ^= dt;
-  }
-  return(x);
-}
-
-
-void SubBytes(unsigned char data[])
-{
-  int i,j;
-  unsigned char *cb=(unsigned char*)data;
-  for(i=0;i<NBb;i+=4)//理論的な意味から二重ループにしているが意味は無い
-  {
-    for(j=0;j<4;j++)
-    {
-      cb[i+j] = Sbox[cb[i+j]];
-    }
-  }
-}
-
-
-void ShiftRows(unsigned char data[])
-{
-  int i,j,i4;
-  unsigned char *cb=(unsigned char*)data;
-  unsigned char cw[NBb];
-  memcpy(cw,cb,sizeof(cw));
-  for(i=0;i<NB;i+=4)
-  {
-    i4 = i*4;
-    for(j=1;j<4;j++)
-    {
-      cw[i4+j+0*4] = cb[i4+j+((j+0)&3)*4];
-      cw[i4+j+1*4] = cb[i4+j+((j+1)&3)*4];
-      cw[i4+j+2*4] = cb[i4+j+((j+2)&3)*4];
-      cw[i4+j+3*4] = cb[i4+j+((j+3)&3)*4];
-    }
-  }
-  memcpy(cb,cw,sizeof(cw));
-}
-
-
-void MixColumns(unsigned char data[])
-{
-  int i,i4,x;
-  for(i=0;i<NB;i++)
-  {
-    i4 = i*4;
-    x  =  mul(dataget(data,i4+0),2) ^
-          mul(dataget(data,i4+1),3) ^
-          mul(dataget(data,i4+2),1) ^
-          mul(dataget(data,i4+3),1);
-    x |= (mul(dataget(data,i4+1),2) ^
-          mul(dataget(data,i4+2),3) ^
-          mul(dataget(data,i4+3),1) ^
-          mul(dataget(data,i4+0),1)) << 8;
-    x |= (mul(dataget(data,i4+2),2) ^
-          mul(dataget(data,i4+3),3) ^
-          mul(dataget(data,i4+0),1) ^
-          mul(dataget(data,i4+1),1)) << 16;
-    x |= (mul(dataget(data,i4+3),2) ^
-          mul(dataget(data,i4+0),3) ^
-          mul(dataget(data,i4+1),1) ^
-          mul(dataget(data,i4+2),1)) << 24;
-    data[i] = x;
-  } 
-}
 
 unsigned int xor(void){
   static unsigned int y = 2463534242;
