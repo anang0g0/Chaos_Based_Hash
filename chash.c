@@ -302,8 +302,7 @@ arrayn chash(unsigned char b[2048]){
   for(i=0;i<256;i++)
     f[i]^=b[i];
   
-  //for(j=0;j<6;j++){
-  for(j=0;j<16;j++){
+  for(j=0;j<8;j++){
     for(i=0;i<NN;i++)
       z[i]=x0[x1[inv_x[i]]];
     
@@ -311,21 +310,25 @@ arrayn chash(unsigned char b[2048]){
     
     for(i=0;i<NN;i++){
       if(f[x1[i]]>0){
-	v[i]=Sbox[ROTL8(f[x1[i]],3)];
-	//こうしたい誘惑
 	//f[i]^=Sbox[ROTL8(f[x1[i]],3)];
+	v[i]^=Sbox[ROTL8(f[x1[i]],3)];
       }
     }
+    memcpy(f,v,sizeof(unsigned char)*NN);
+
+    /*
     for(i=0;i<NN;i++){
-      f[i]^=v[i]; 
-      //printf("%d,",f[i]);
+      //f[i]^=v[i];
+      printf("%d,",f[i]);
     }
-    //printf("\n");
+    printf("\n");
+    */
     
     for(k=1;k<2048/NN;k++){
       for(i=0;i<256;i++)
 	f[i]^=b[k*NN+i];
     }    
+    
   }
   /*
     for(i=0;i<NN;i++)
@@ -334,7 +337,7 @@ arrayn chash(unsigned char b[2048]){
   */
   
   //    exit(1);
-
+  
   memcpy(n.ar,f,sizeof(unsigned char)*NN);
   //printf("%x\n",n.ar[i]);
   
