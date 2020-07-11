@@ -294,8 +294,8 @@ arrayn chash(unsigned char b[2048]){
    
   
   //#pragma omp parallel for
-  //for(i=0;i<NN;i++)
-  //f[i]^=salt[i];
+  for(i=0;i<NN;i++)
+    f[i]^=salt[i];
   
   
   k=0;
@@ -316,7 +316,7 @@ arrayn chash(unsigned char b[2048]){
     }
     memcpy(f,v,sizeof(unsigned char)*NN);
     
-    /*  
+    /*
     for(i=0;i<NN;i++)
       printf("%d,",f[i]);
     printf("\n");
