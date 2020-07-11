@@ -458,6 +458,7 @@ main (int argc, char *argv[])
        */
       t = hash (argc, argv);
 
+      //慎ましくここは256ビットだけ
       for (i = 0; i < 16 / 2; i++)
 	printf ("%08x", t.h[i]);
       printf (" %s", argv[1]);
