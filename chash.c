@@ -302,7 +302,7 @@ arrayn chash(unsigned char b[2048]){
       for(i=0;i<256;i++)
 	f[i]^=b[i];
   
-    for(j=0;j<6;j++){
+    for(j=0;j<10;j++){
     for(i=0;i<NN;i++)
       z[i]=x0[x1[inv_x[i]]];
     
@@ -312,7 +312,9 @@ arrayn chash(unsigned char b[2048]){
       if(f[x1[i]]>0)
 	v[i]=Sbox[ROTL8(f[x1[i]],3)];
       f[i]^=v[i];
+      //printf("%d,",f[i]);
     }
+    //printf("\n");
     
     for(k=1;k<2048/NN;k++){
       for(i=0;i<256;i++)
