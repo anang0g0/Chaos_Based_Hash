@@ -246,7 +246,7 @@ chash (unsigned char b[2048])
 
   unsigned char salt[NN] = { 0 };	//={ 148, 246, 52, 251, 16, 194, 72, 150, 249, 23, 90, 107, 151, 42, 154, 124, 48, 58, 30, 24, 42, 33, 38, 10, 115, 41, 164, 16, 33, 32, 252, 143, 86, 175, 8, 132, 103, 231, 95, 190, 61, 29, 215, 75, 251, 248, 72, 48, 224, 200, 147, 93, 112, 25, 227, 223, 206, 137, 51, 88, 109, 214, 17, 172};
 
-  unsigned char z[NN], w[NN];
+  unsigned char z[NN], w[NN]={0};
   unsigned char v[256] = { 0 }, g[NN] = { 0 } , f[NN] = { 0 };
   unsigned char inv_y[NN];
   FILE *fp, *op;
@@ -254,7 +254,9 @@ chash (unsigned char b[2048])
   time_t t;
   int k;
 
-
+  for(i=0;i<NN;i++)
+    w[i]=0xc6;
+  
   for (i = 0; i < NN; i++)
     salt[i] = xor64 ();
 
@@ -310,7 +312,11 @@ chash (unsigned char b[2048])
 	    f[i] ^= b[count * NN + i];
 	  count++;
 	}
-
+      /*
+      //padding?
+      if(count>=2048/NN)
+	memcpy(f,w,sizeof(unsigned char)*NN);
+      */
     }
 
   memcpy (n.ar, f, sizeof (unsigned char) * NN);
