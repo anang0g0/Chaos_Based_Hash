@@ -312,12 +312,12 @@ arrayn chash(unsigned char b[2048]){
       if(f[x1[i]]>0)
 	f[i]^=Sbox[ROTL8(f[x1[i]],3)];
     }
-    /*
+    
     for(k=1;k<2048/NN;k++){
       for(i=0;i<256;i++)
 	f[i]^=b[k*NN+i];
     }    
-    */
+    
     }
     /*
     for(i=0;i<NN;i++)
