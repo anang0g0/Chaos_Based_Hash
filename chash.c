@@ -302,7 +302,10 @@ arrayn chash(unsigned char b[2048]){
   for(i=0;i<256;i++)
     f[i]^=b[i];
   
-  for(j=0;j<12;j++){
+  
+  memcpy(v,f,sizeof(unsigned char)*NN);
+  
+  for(j=0;j<10;j++){
     for(i=0;i<NN;i++)
       z[i]=x0[x1[inv_x[i]]];
     
