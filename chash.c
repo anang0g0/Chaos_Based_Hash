@@ -283,6 +283,7 @@ chash (unsigned char b[2048])
 
   memcpy (v, f, sizeof (unsigned char) * NN);
 
+  //1byteデータが256バイト埋め尽くされる大体のループ
   for (j = 0; j < 10; j++)
     {
       for (i = 0; i < NN; i++)
