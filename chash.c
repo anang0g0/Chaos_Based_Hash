@@ -280,7 +280,7 @@ chash (unsigned char b[2048])
   for (i = 0; i < 256; i++)
     f[i] ^= b[i];
 
-
+  c=1;
   memcpy (v, f, sizeof (unsigned char) * NN);
 
   //1byteデータが256バイト埋め尽くされる大体のループ
@@ -296,7 +296,7 @@ chash (unsigned char b[2048])
 	  if (f[x1[i]] > 0)
 	    {
 	      //f[i]^=Sbox[ROTL8(f[x1[i]],3)];
-	      v[i] ^= Sbox[ROTL8 (f[x1[i]], 3)];
+	      v[i] ^= Sbox[ROTL8 (f[x1[i]]+i, 3)];
 	    }
 	}
       memcpy (f, v, sizeof (unsigned char) * NN);
@@ -307,18 +307,22 @@ chash (unsigned char b[2048])
          printf("\n");
        */
 
-      while (count < 2048 / NN)
+      if(count < 2048 / NN)
 	{			//k=1;k<2048/NN;k++){
 	  for (i = 0; i < 256; i++)
 	    f[i] ^= b[count * NN + i];
-	  count++;
+
 	}
-      /*
+      
       //今のところ何もしないでかき回すだけ
       //padding?
-      if(count>=2048/NN)
-      　　memcpy(f,w,sizeof(unsigned char)*NN);
-      */
+      if(count>=2048/NN){
+	for(i=0;i<NN;i++)
+	  f[i]^=w[i];
+      }
+	//memcpy(f,w,sizeof(unsigned char)*NN);
+      
+      count++;
     }
 
   memcpy (n.ar, f, sizeof (unsigned char) * NN);
@@ -469,14 +473,11 @@ main (int argc, char *argv[])
     {
       /*
          seed();
-
          p=crand(password);
          for(i=0;i<8;i++)
          printf("%llx",p.u[i]);
          printf("\n");
-
          t=hash(argc,argv);
-
          for(i=0;i<16/2;i++)
          printf("%08x",t.h[i]);
          printf(" %s",argv[1]);
@@ -486,3 +487,4 @@ main (int argc, char *argv[])
 
   return 0;
 }
+
