@@ -43,6 +43,7 @@ typedef union
 
 typedef union aN
 {
+  unsigned int d[64];
   unsigned long long int u[32];
   unsigned char ar[NN];
   //
@@ -292,14 +293,14 @@ chash (unsigned char b[2048])
 	z[i] = x0[x1[inv_x[i]]];
 
       memcpy (x1, z, sizeof (unsigned char) * NN);
-
+      c.u[0]++;
       for (i = 0; i < NN; i++)
 	{
 	  if (f[x1[i]] > 0)
 	    {
 	      //f[i]^=Sbox[ROTL8(f[x1[i]],3)];
 	      v[i] ^= Sbox[ROTL8 (f[x1[i]]+c.ar[i], 3)];
-	      c.u[0]++;
+
 	    }
 	}
       memcpy (f, v, sizeof (unsigned char) * NN);
@@ -312,9 +313,10 @@ chash (unsigned char b[2048])
 
       if(count < 2048 / NN)
 	{			//k=1;k<2048/NN;k++){
-	  for (i = 0; i < 256; i++)
+	  for (i = 0; i < 256; i++){
 	    f[i] ^= b[count * NN + i];
-
+	    // f[i]^=c.ar[i];
+	  }
 	}
       
       //padding?
