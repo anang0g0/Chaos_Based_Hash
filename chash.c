@@ -346,7 +346,11 @@ hash (int argc, char *argv[])
 	}
       while ((n = fread (buf, 1, 2048, fp)) > 0)
 	{
-
+	  if(n<2048){
+	    for(i=n;i<2048;i++)
+	      buf[i]=0xc6;
+	  }
+	    
 	  //memset(h.h,0,sizeof(h.h));
 	  n = 0;
 	  a = chash (buf);
