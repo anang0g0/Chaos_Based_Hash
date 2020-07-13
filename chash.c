@@ -302,7 +302,7 @@ chash (unsigned char b[2048])
 	  if (f[x1[i]] > 0)
 	    {
 	      //f[i]^=Sbox[ROTL8(f[x1[i]],3)];
-	      v[i] ^= Sbox[ROTL8 (f[x1[i]]^c.ar[i], 3)];
+	      v[i] ^= Sbox[ROTL8 (f[x1[i]]+c.ar[i], 3)];
 
 	    }
 	}
@@ -327,7 +327,6 @@ chash (unsigned char b[2048])
 	for(i=0;i<NN;i++)
 	  f[i]^=i;
       }
-      
       
       count++;
     }
