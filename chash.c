@@ -54,6 +54,9 @@ typedef struct pub
   unsigned char b[NN];
 } set;
 
+unsigned long long int c=0;
+
+
 #define I8T char
 #define U8C(v) (v##U)
 
@@ -251,7 +254,7 @@ chash (unsigned char b[2048])
   unsigned char v[256] = { 0 }, g[NN] = { 0 } , f[NN] = { 0 };
   unsigned char inv_y[NN];
   FILE *fp, *op;
-  int c, count = 1;
+  int  count = 1;
   time_t t;
   int k;
 
