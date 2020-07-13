@@ -262,7 +262,7 @@ chash (unsigned char b[2048])
   memcpy (v, f, sizeof (unsigned char) * NN);
 
   //バッファを埋める回数だけ回す
-  for (j = 0; j < 8; j++)
+  for (j = 0; j < 2048/NN; j++)
     {
       for (i = 0; i < NN; i++)
 	z[i] = x0[x1[inv_x[i]]];
