@@ -276,7 +276,7 @@ chash (unsigned char b[2048])
 
   //#pragma omp parallel for
   for (i = 0; i < NN; i++)
-    f[i] ^= salt[i];
+    //f[i] ^= salt[i];
 
 
   k = 0;
@@ -294,15 +294,13 @@ chash (unsigned char b[2048])
 
       memcpy (x1, z, sizeof (unsigned char) * NN);
       
-      c.u[0]=xor64();
-      //printf("%llu\n",c.u[0]);
       
       for (i = 0; i < NN; i++)
 	{
 	  if (f[x1[i]] > 0)
 	    {
 	      //f[i]^=Sbox[ROTL8(f[x1[i]],3)];
-	      v[i] ^= Sbox[ROTL8 (f[x1[i]]+c.ar[i], 3)];
+	      v[i] ^= Sbox[ROTL8 (f[x1[i]]+f[i], 3)];
 
 	    }
 	}
