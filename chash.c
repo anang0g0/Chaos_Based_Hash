@@ -272,7 +272,7 @@ chash (unsigned char b[2048])
 
   //#pragma omp parallel for
   for (i = 0; i < NN; i++)
-    f[i] ^= salt[i];
+    //f[i] ^= salt[i];
 
 
   k = 0;
