@@ -252,7 +252,7 @@ chash (unsigned char b[2048])
 
   //#pragma omp parallel for
   for (i = 0; i < NN; i++)
-    f[i] ^= salt[i];
+    //f[i] ^= salt[i];
 
 
   k = 0;
@@ -262,8 +262,8 @@ chash (unsigned char b[2048])
 
   memcpy (v, f, sizeof (unsigned char) * NN);
 
-  //1byteデータが256バイト埋め尽くされる大体のループ
-  for (j = 0; j < 10; j++)
+  //バッファを埋める回数だけ回す
+  for (j = 0; j < 8; j++)
     {
       for (i = 0; i < NN; i++)
 	z[i] = x0[x1[inv_x[i]]];
@@ -292,11 +292,11 @@ chash (unsigned char b[2048])
     
       //  memcpy (f, v, sizeof (unsigned char) * NN);
   
-  /*
-         for(i=0;i<NN;i++)
-         printf("%d,",f[i]);
-         printf("\n");
-       */
+      /*
+      for(i=0;i<NN;i++)
+	printf("%d,",f[i]);
+      printf("\n");
+      */
 
       if(count < 2048 / NN)
 	{			//k=1;k<2048/NN;k++){
@@ -305,13 +305,13 @@ chash (unsigned char b[2048])
 	    // f[i]^=c.ar[i];
 	  }
 	}
-      
+      /*
       //padding?
       if(count>=2048/NN){
 	for(i=0;i<NN;i++)
 	  f[i]^=i;
       }
-      
+      */
       count++;
     }
 
