@@ -296,7 +296,7 @@ chash (unsigned char b[2048])
 	  if (f[x1[i]] > 0)
 	    {
 	      //f[i]^=Sbox[ROTL8(f[x1[i]],3)];
-	      v[i] ^= Sbox[ROTL8 (f[x1[i]]+i, 3)];
+	      v[i] ^= Sbox[ROTL8 (f[x1[i]], 3)+i];
 	    }
 	}
       memcpy (f, v, sizeof (unsigned char) * NN);
@@ -318,9 +318,8 @@ chash (unsigned char b[2048])
       //padding?
       if(count>=2048/NN){
 	for(i=0;i<NN;i++)
-	  f[i]^=w[i];
+	  f[i]^=i;
       }
-	//memcpy(f,w,sizeof(unsigned char)*NN);
       
       count++;
     }
