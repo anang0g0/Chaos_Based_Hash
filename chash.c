@@ -295,6 +295,7 @@ chash (unsigned char b[2048])
       memcpy (x1, z, sizeof (unsigned char) * NN);
       
       c.u[0]=xor64();
+      //printf("%llu\n",c.u[0]);
       
       for (i = 0; i < NN; i++)
 	{
