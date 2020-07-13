@@ -261,7 +261,7 @@ chash (unsigned char b[2048])
 
   
   for (i = 0; i < NN; i++)
-    salt[i] = xor64 ();
+    salt[i] = xor64 ()%256;
 
   for (i = 0; i < NN; i++)
     {
@@ -276,7 +276,7 @@ chash (unsigned char b[2048])
 
   //#pragma omp parallel for
   for (i = 0; i < NN; i++)
-    f[i] ^= salt[i];
+    //f[i] ^= salt[i];
 
 
   k = 0;
