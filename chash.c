@@ -41,8 +41,9 @@ typedef union
   unsigned char c[64];
 } array16;
 
-typedef struct aN
+typedef union aN
 {
+  unsigned long long int u[32];
   unsigned char ar[NN];
   //
 } arrayn;
@@ -254,8 +255,6 @@ chash (unsigned char b[2048])
   time_t t;
   int k;
 
-  for(i=0;i<NN;i++)
-    w[i]=0xc6;
   
   for (i = 0; i < NN; i++)
     salt[i] = xor64 ();
@@ -314,12 +313,12 @@ chash (unsigned char b[2048])
 
 	}
       
-      //今のところ何もしないでかき回すだけ
       //padding?
       if(count>=2048/NN){
 	for(i=0;i<NN;i++)
 	  f[i]^=i;
       }
+      
       
       count++;
     }
