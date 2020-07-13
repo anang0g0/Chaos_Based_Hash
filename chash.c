@@ -305,13 +305,7 @@ chash (unsigned char b[2048])
 	    // f[i]^=c.ar[i];
 	  }
 	}
-      /*
-      //padding?
-      if(count>=2048/NN){
-	for(i=0;i<NN;i++)
-	  f[i]^=i;
-      }
-      */
+      
       count++;
     }
 
