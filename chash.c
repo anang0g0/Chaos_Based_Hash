@@ -291,7 +291,7 @@ chash (unsigned char b[2048])
     {
       for (i = 0; i < NN; i++)
 	z[i] = x0[x1[inv_x[i]]];
-
+      
       memcpy (x1, z, sizeof (unsigned char) * NN);
       
       
@@ -299,14 +299,23 @@ chash (unsigned char b[2048])
 	{
 	  if (f[x1[i]] > 0)
 	    {
-	      //f[i]^=Sbox[ROTL8(f[x1[i]],3)];
-	      v[i] ^= Sbox[ROTL8 (f[x1[i]]+f[i], 3)];
-
+	      f[i]^=Sbox[ROTL8(f[x1[i]],3)];
+	      /*
+	      if(i%3==0){
+		v[i] ^= Sbox[ROTL8 (f[x1[i]], 3)];
+	      }else if(i%17==0){
+		v[i] ^= Sbox[ROTL8 (f[x1[i]],5)];
+	      }else{
+		f[i] ^= Sbox[ROTL8 (f[x1[i]],2)];
+	      }
+	      */
 	    }
+	  
 	}
-      memcpy (f, v, sizeof (unsigned char) * NN);
-
-      /*
+    
+      //  memcpy (f, v, sizeof (unsigned char) * NN);
+  
+  /*
          for(i=0;i<NN;i++)
          printf("%d,",f[i]);
          printf("\n");
