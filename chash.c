@@ -272,22 +272,22 @@ chash (unsigned char b[2048])
 	{
 	  if (f[x1[i]] > 0)
 	    {
-	      f[i]^=Sbox[ROTL8(f[x1[i]],3)+f[i]];
-	      /*
+	      //f[i]^=Sbox[ROTL8(f[x1[i]],3)+f[i]];
+	      
 		//shaの真似
 	      if(i%3==0){
-		v[i] ^= Sbox[ROTL8 (f[x1[i]], 3)];
+		v[i] ^= Sbox[ROTL8 (f[x1[i]], 7)+f[(i+11)%NN]];
 	      }else if(i%17==0){
-		v[i] ^= Sbox[ROTL8 (f[x1[i]],5)];
+		v[i] ^= Sbox[ROTL8 (f[x1[i]], 5)+f[(i+13)%NN]];
 	      }else{
-		f[i] ^= Sbox[ROTL8 (f[x1[i]],2)];
+		v[i] ^= Sbox[ROTL8 (f[x1[i]], 2)+f[i]];
 	      }
-	      */
+	      
 	    }
 	  
 	}
     
-      //  memcpy (f, v, sizeof (unsigned char) * NN);
+      memcpy (f, v, sizeof (unsigned char) * NN);
   
       /*
       for(i=0;i<NN;i++)
