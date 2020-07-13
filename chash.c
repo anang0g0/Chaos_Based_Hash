@@ -54,7 +54,7 @@ typedef struct pub
   unsigned char b[NN];
 } set;
 
-unsigned long long int c=0;
+arrayn c={0};
 
 
 #define I8T char
@@ -282,7 +282,7 @@ chash (unsigned char b[2048])
   for (i = 0; i < 256; i++)
     f[i] ^= b[i];
 
-  c=1;
+
   memcpy (v, f, sizeof (unsigned char) * NN);
 
   //1byteデータが256バイト埋め尽くされる大体のループ
@@ -298,7 +298,8 @@ chash (unsigned char b[2048])
 	  if (f[x1[i]] > 0)
 	    {
 	      //f[i]^=Sbox[ROTL8(f[x1[i]],3)];
-	      v[i] ^= Sbox[ROTL8 (f[x1[i]]+i, 3)];
+	      v[i] ^= Sbox[ROTL8 (f[x1[i]]+c.ar[i], 3)];
+	      c.u[0]++;
 	    }
 	}
       memcpy (f, v, sizeof (unsigned char) * NN);
