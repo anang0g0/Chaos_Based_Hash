@@ -293,7 +293,9 @@ chash (unsigned char b[2048])
 	z[i] = x0[x1[inv_x[i]]];
 
       memcpy (x1, z, sizeof (unsigned char) * NN);
-      c.u[0]++;
+      
+      c.u[0]=xor64();
+      
       for (i = 0; i < NN; i++)
 	{
 	  if (f[x1[i]] > 0)
