@@ -275,20 +275,22 @@ chash (unsigned char b[2048])
 	      //CTRのつもり
 	      v[i]^=Sbox[ROTL8(f[x1[i]],3)+c.ar[i]];
 	      v[i]^=f[i];
-	      
+	      /*
 	      //投げやりな方法１
 	      f[i]^=Sbox[ROTL8(f[x1[i]],3)+f[i]];
 
 	      
 	      //shaの真似(投げやりな方法その２)
 	      if(i%3==0){
-		v[i] ^= Sbox[ROTL8 (f[x1[i]], 7)+f[(i+11)%NN]];
-	      }else if(i%17==0){
-		v[i] ^= Sbox[ROTL8 (f[x1[i]], 5)+f[(i+13)%NN]];
-	      }else{
+		v[i] ^= Sbox[ROTL8 (f[x1[i]], 5)+f[(i+11)%NN]];
+	      } 
+	      else if(i%17==0){
+		v[i] ^= Sbox[ROTL8 (f[x1[i]], 7)+f[(i+13)%NN]];
+	      }
+	      else{
 		v[i] ^= Sbox[ROTL8 (f[x1[i]], 2)+f[i]];
 	      }
-	      
+	      */
 	    }
 	  
 	}
