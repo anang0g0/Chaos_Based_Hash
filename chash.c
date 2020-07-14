@@ -267,14 +267,20 @@ chash (unsigned char b[2048])
       
       memcpy (x1, z, sizeof (unsigned char) * NN);
       
-      
+      c.u[0]=xor64();
       for (i = 0; i < NN; i++)
 	{
 	  if (f[x1[i]] > 0)
 	    {
-	      //f[i]^=Sbox[ROTL8(f[x1[i]],3)+f[i]];
+	      //CTRのつもり
+	      v[i]^=Sbox[ROTL8(f[x1[i]],3)+c.ar[i]];
+	      v[i]^=f[i];
 	      
-		//shaの真似
+	      //投げやりな方法１
+	      //f[i]^=Sbox[ROTL8(f[x1[i]],3)+f[i]];
+
+	      /*
+		//shaの真似(投げやりな方法その２)
 	      if(i%3==0){
 		v[i] ^= Sbox[ROTL8 (f[x1[i]], 7)+f[(i+11)%NN]];
 	      }else if(i%17==0){
@@ -282,7 +288,7 @@ chash (unsigned char b[2048])
 	      }else{
 		v[i] ^= Sbox[ROTL8 (f[x1[i]], 2)+f[i]];
 	      }
-	      
+	      */
 	    }
 	  
 	}
