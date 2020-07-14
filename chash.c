@@ -274,7 +274,7 @@ chash (unsigned char b[2048])
 	    {
 	      //CTRのつもり
 	      v[i]^=Sbox[ROTL8(f[x1[i]],3)+c.ar[i]];
-	      v[i]^=f[i];
+
 	      /*
 	      //投げやりな方法１
 	      f[i]^=Sbox[ROTL8(f[x1[i]],3)+f[i]];
