@@ -246,7 +246,7 @@ chash (unsigned char b[2048])
   //  exit(1);
 
 
-  //#pragma omp parallel for
+  //デバッグ中なので省略
   for (i = 0; i < NN; i++)
     //f[i] ^= salt[i];
 
@@ -265,7 +265,8 @@ chash (unsigned char b[2048])
 	z[i] = x0[x1[inv_x[i]]];
       
       memcpy (x1, z, sizeof (unsigned char) * NN);
-      
+
+      //デバッグ中なので省略
       //c.u[0]=xor64();
       for (i = 0; i < NN; i++)
 	{
@@ -296,7 +297,7 @@ chash (unsigned char b[2048])
 	      
       memcpy (f, v, sizeof (unsigned char) * NN);
 	    
-      //for debug
+      //print for debugging
       for(i=0;i<NN;i++)
 	printf("%d,",f[i]);
       printf("\n");
