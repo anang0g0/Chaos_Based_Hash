@@ -272,31 +272,31 @@ chash (unsigned char b[2048])
 	  if (f[x1[i]] > 0)
 	    {
 	      //CTRのつもり
-	      //v[i]^=Sbox[ROTL8(f[x1[i]],3)+c.ar[i]];
+	      v[i]^=Sbox[ROTL8(f[x1[i]],3)+c.ar[i]];
 
 	      
 	      //投げやりな方法１
 	      //f[i]^=Sbox[ROTL8(f[x1[i]],3)+f[i]];
 
-	      
+	      /*
 	      //shaの真似(投げやりな方法その２)
 	      if(i%3==0){
-		v[i] ^= Sbox[ROTL8 (f[x1[i]], 5)];//+f[(i+11)%NN]];
+		v[i] ^= Sbox[ROTL8 (f[x1[i]], 5)];//+f[(i+17)%NN]];
 	      } 
-	      else if(i%17==0){
+	      else if(i%11==0){
 		v[i] ^= Sbox[ROTL8 (f[x1[i]], 7)];//+f[(i+13)%NN]];
 	      }
 	      else{
 		v[i] ^= Sbox[ROTL8 (f[x1[i]], 2)];//+f[i]];
 	      } 
-	      
+	      */
 	    }
-	  
+	      
 	}
 	      
       memcpy (f, v, sizeof (unsigned char) * NN);
 	    
-      
+      //for debug
       for(i=0;i<NN;i++)
 	printf("%d,",f[i]);
       printf("\n");
