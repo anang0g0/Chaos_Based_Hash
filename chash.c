@@ -272,12 +272,9 @@ chash (unsigned char b[2048])
 	{
 	  if (f[x1[i]] > 0)
 	    {
-	      //CTRのつもり(mode 1)
-	      //v[i]^=Sbox[ROTL8(f[x1[i]],3)+c.ar[i]];
-
 	      
 	      //mode 2
-	      f[i]^=Sbox[ROTL8(f[x1[i]],3)+f[i]];
+	      f[i]^=Sbox[ROTL8(f[x1[i]],3)];//+f[i]];
 
 	      /*
 	      //shaの真似(mode 3)
@@ -297,7 +294,7 @@ chash (unsigned char b[2048])
 
       //mode 2 の時はここをコメントアウト
       //memcpy (f, v, sizeof (unsigned char) * NN);
-	    
+      
       //print for debugging
       for(i=0;i<NN;i++)
 	printf("%d,",f[i]);
