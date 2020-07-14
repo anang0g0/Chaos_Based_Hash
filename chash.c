@@ -248,7 +248,7 @@ chash (unsigned char b[2048])
 
   //#pragma omp parallel for
   for (i = 0; i < NN; i++)
-    f[i] ^= salt[i];
+    //f[i] ^= salt[i];
 
 
   k = 0;
@@ -281,25 +281,26 @@ chash (unsigned char b[2048])
 	      
 	      //shaの真似(投げやりな方法その２)
 	      if(i%3==0){
-		v[i] ^= Sbox[ROTL8 (f[x1[i]], 5)+f[(i+11)%NN]];
+		v[i] ^= Sbox[ROTL8 (f[x1[i]], 5)];//+f[(i+11)%NN]];
 	      } 
 	      else if(i%17==0){
-		v[i] ^= Sbox[ROTL8 (f[x1[i]], 7)+f[(i+13)%NN]];
+		v[i] ^= Sbox[ROTL8 (f[x1[i]], 7)];//+f[(i+13)%NN]];
 	      }
 	      else{
-		v[i] ^= Sbox[ROTL8 (f[x1[i]], 2)+f[i]];
+		v[i] ^= Sbox[ROTL8 (f[x1[i]], 2)];//+f[i]];
 	      } 
+	      
 	    }
 	  
 	}
-    
+	      
       memcpy (f, v, sizeof (unsigned char) * NN);
-  
-      /*
+	    
+      
       for(i=0;i<NN;i++)
 	printf("%d,",f[i]);
       printf("\n");
-      */
+      
 
       if(count < 2048 / NN)
 	{			//k=1;k<2048/NN;k++){
@@ -343,12 +344,13 @@ hash (int argc, char *argv[])
 	}
       while ((n = fread (buf, 1, 2048, fp)) > 0)
 	{
+	  /*
 	  //paddaing
 	  if(n<2048){
 	    for(i=n;i<2048;i++)
 	      buf[i]=0xc6;
 	  }
-	    
+	  */
 	  //memset(h.h,0,sizeof(h.h));
 	  n = 0;
 	  a = chash (buf);
