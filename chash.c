@@ -273,11 +273,11 @@ chash (unsigned char b[2048])
 	  if (f[x1[i]] > 0)
 	    {
 	      //CTRのつもり
-	      v[i]^=Sbox[ROTL8(f[x1[i]],3)+c.ar[i]];
+	      //v[i]^=Sbox[ROTL8(f[x1[i]],3)+c.ar[i]];
 
-	      /*
+	      
 	      //投げやりな方法１
-	      f[i]^=Sbox[ROTL8(f[x1[i]],3)+f[i]];
+	      //f[i]^=Sbox[ROTL8(f[x1[i]],3)+f[i]];
 
 	      
 	      //shaの真似(投げやりな方法その２)
@@ -290,7 +290,7 @@ chash (unsigned char b[2048])
 	      else{
 		v[i] ^= Sbox[ROTL8 (f[x1[i]], 2)+f[i]];
 	      }
-	      */
+	      
 	    }
 	  
 	}
