@@ -272,15 +272,15 @@ chash (unsigned char b[2048])
 	{
 	  if (f[x1[i]] > 0)
 	    {
-	      //CTRのつもり
+	      //CTRのつもり(mode 1)
 	      v[i]^=Sbox[ROTL8(f[x1[i]],3)+c.ar[i]];
 
 	      
-	      //投げやりな方法１
+	      //mode 2
 	      //f[i]^=Sbox[ROTL8(f[x1[i]],3)+f[i]];
 
 	      /*
-	      //shaの真似(投げやりな方法その２)
+	      //shaの真似(mode 3)
 	      if(i%3==0){
 		v[i] ^= Sbox[ROTL8 (f[x1[i]], 5)];//+f[(i+17)%NN]];
 	      } 
@@ -294,7 +294,8 @@ chash (unsigned char b[2048])
 	    }
 	      
 	}
-	      
+
+      //mode 2 の時はここをコメントアウト
       memcpy (f, v, sizeof (unsigned char) * NN);
 	    
       //print for debugging
