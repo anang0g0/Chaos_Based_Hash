@@ -10,6 +10,10 @@
 
 カオス理論：https://ja.m.wikipedia.org/wiki/%E3%82%AB%E3%82%AA%E3%82%B9%E7%90%86%E8%AB%96
 
+AES:https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.197.pdf
+
+SHA-3:https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf
+
 20200714（モード2,3に対する考察）
 
 CTRを使わない他の方法も考えました。
