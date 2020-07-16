@@ -29,6 +29,8 @@ SPNという意味はウィキに寄ると換字と置換の意味らしいけ�
 もしかするとAESの最終候補の中にFeistel構造のものが残っているかもしれないからそれを調べてみたらTwoFishがそうだと分り早速ダウンロード。
 とにかく紙の本が欲しい！
 
+正式にはアナウンスしてないけど、秘密鍵暗号も作るつもりです。
+
 TwoFish:https://www.schneier.com/academic/paperfiles/paper-twofish-paper.pdf
 
 20200714（モード2,3に対する考察）
