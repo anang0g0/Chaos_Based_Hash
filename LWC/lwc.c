@@ -248,7 +248,7 @@ seed (void)
 
 //ハッシュ関数本体
 arrayA
-chash (unsigned char b[2048])
+enc (unsigned char b[2048])
 {
   int i, j = 0;
   arrayA n;
@@ -295,14 +295,13 @@ chash (unsigned char b[2048])
     {
       for (i = 0; i < NN; i++)
 	z[i] = x0[x1[inv_x[i]]];
-      
-      memcpy (x1, z, sizeof (unsigned char) * NN);
+      //memcpy (x1, z, sizeof (unsigned char) * NN);
 
       //デバッグ中なので省略
       //c.u[0]=xor64();
       for (i = 0; i < NN; i++)
 	{
-	  if (f[x1[i]] > 0)
+	  if (f[i] > 0)
 	    {
 	      
 	      //mode 2
@@ -310,25 +309,147 @@ chash (unsigned char b[2048])
 
 	      
 	      //shaの真似(mode 3)
-	      if(i%3==0){
-		v[i] = gf[ROTL8 (f[x1[i]], 5)]^key[i];
-	      } 
+	      // if(i%2==0){
+	      v[i] = Sbox[f[z[i]]^key[i]];//gf[f[z[i]]];
+	      //
+		//}
+	      /*
 	      else if(i%11==0){
 		v[i] = gf[ROTL8 (f[x1[i]], 7)]^key[i];
-	      }
-	      else{
-		v[i] = gf[ROTL8 (f[x1[i]], 2)]^key[i];
-	      } 
+		}*/
+	      //else{
+		//v[i] = gf[f[x1[i]]];//^key[i];
+		//}
 	      
 	    }
 	  roun();
 	  
 	}
+
       memcpy (f, v, sizeof (unsigned char) * NN);
       
       //print for debugging
       for(i=0;i<NN;i++){
 	//printf("%02x",f[i]);
+	n.c[j*NN+i]=f[i];
+      }
+      //printf("\n");
+      
+
+      if(count < 2048 / NN)
+	{			//k=1;k<2048/NN;k++){
+	  for (i = 0; i < NN; i++){
+	    f[i] = b[count * NN + i];
+	  }
+	}
+
+      count++;
+    }
+
+  //memcpy (n.ar, f, sizeof (unsigned char) * NN);
+
+  //exit(1);
+
+
+  
+  return n;
+
+}
+
+
+//ハッシュ関数本体
+arrayA
+dec (unsigned char b[2048])
+{
+  int i, j = 0;
+  arrayA n;
+
+  unsigned char salt[NN] = { 0 };	//={ 148, 246, 52, 251, 16, 194, 72, 150, 249, 23, 90, 107, 151, 42, 154, 124, 48, 58, 30, 24, 42, 33, 38, 10, 115, 41, 164, 16, 33, 32, 252, 143, 86, 175, 8, 132, 103, 231, 95, 190, 61, 29, 215, 75, 251, 248, 72, 48, 224, 200, 147, 93, 112, 25, 227, 223, 206, 137, 51, 88, 109, 214, 17, 172};
+
+  unsigned char z[NN], w[NN]={0};
+  unsigned char v[NN] = { 0 }, f[NN] = { 0 };
+  unsigned char inv_y[NN];
+  FILE *fp, *op;
+  int  count = 1;
+  time_t t;
+  int k;
+
+  
+  for (i = 0; i < NN; i++)
+    salt[i] = xor64 ()%256;
+
+  for (i = 0; i < NN; i++)
+    {
+      inv_x[x0[i]] = i;
+      //inv_y[tt[i]]=i;
+    }
+
+  //for(i=0;i<NN;i++)
+  //  printf("%d,",inv_x[i]);
+  //  exit(1);
+
+
+  //デバッグ中なので省略
+  for (i = 0; i < NN; i++)
+    //f[i] ^= salt[i];
+
+
+  k = 0;
+  for (i = 0; i < NN; i++)
+    f[i] ^= b[i];
+
+
+  memcpy (v, f, sizeof (unsigned char) * NN);
+
+  //バッファを埋める回数だけ回す
+  for (j = 0; j < 2048/NN; j++)
+    {
+      for (i = 0; i < NN; i++)
+	z[i] = x0[x1[inv_x[i]]];
+      for(i=0;i<NN;i++)
+	w[z[i]]=i;
+      //memcpy (x1, z, sizeof (unsigned char) * NN);
+
+      //デバッグ中なので省略
+      //c.u[0]=xor64();
+      for (i = 0; i < NN; i++)
+	{
+	  if (f[i] > 0)
+	    {
+	      
+	      //mode 2
+	      //f[i]^=Sbox[ROTL8(f[x1[i]],3)];//+f[i]];
+
+	      
+	      //shaの真似(mode 3)
+	      //if(i%2==0){
+	      v[i]=invSbox[f[i]]^key[i];
+
+	      
+	      //fg[f[z[i]]^key[i]];//fg[f[w[i]]];
+	      //
+	      //v[i]^=1;
+		//}
+	      /*
+	      else if(i%11==0){
+		v[i] = gf[ROTL8 (f[x1[i]], 7)]^key[i];
+		}*/
+	      //else{
+		//v[x1[i]] = fg[f[i]];//^key[i];
+		//} 
+	      
+	    }
+	  roun();
+      
+	}
+
+      for(i=0;i<NN;i++)
+	f[i]=v[w[i]];
+      //memcpy (f, v, sizeof (unsigned char) * NN);
+          
+      //print for debugging
+      for(i=0;i<NN;i++){
+	//printf("%c",f[i]);
 	n.c[j*NN+i]=f[i];
       }
       //printf("\n");
@@ -365,7 +486,7 @@ hash (int argc, char *argv[])
   unsigned char buf[2048] = { 0 };
   FILE *fp,*fq;
   arrayA a = { 0 };
-  arrayn b = { 0 };
+  arrayA b = { 0 };
 
 
   if (BYTE)
@@ -380,21 +501,26 @@ hash (int argc, char *argv[])
       while ((n = fread (buf, 1, 2048, fp)) > 0)
 	{
 	  printf("@\n");
-	  /*
+	  
 	  //paddaing
 	  if(n<2048){
 	    for(i=n;i<2048;i++)
 	      buf[i]=0xc6;
 	  }
-	  */
+	  
 	  //memset(h.h,0,sizeof(h.h));
 
-	  a = chash (buf);
+	  a = enc (buf);
 	  
-	  for(j=0;j<2048;j++)
+	  for(j=0;j<n;j++)
 	    printf("%02x",a.c[j]);
 	  printf("\n");
-	  
+
+	  b=dec(a.c);
+	  for(j=0;j<n;j++)
+	  printf("%c",b.c[j]);
+	  printf("\n");
+
 	  n = 0;
 	}
     }
@@ -413,7 +539,7 @@ arrayA
   int i, j;
   arrayA b = { 0 };
 
-  a = chash (u);
+  a = enc (u);
   j = 0;
   memset (b.c, 0, sizeof (b.c));
   for (i = 0; i < 2048; i++)
