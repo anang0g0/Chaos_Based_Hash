@@ -71,6 +71,8 @@ arrayn c={0};
 #define U8V(v) ((unsigned char)(v) & U8C(0xFF))
 #define ROTL8(v, n) \
   (U8V((v) << (n)) | ((v) >> (8 - (n))))
+#define ROTR8(v, n) \
+  (U8V((v) >> (n)) | ((v) << (8 - (n))))
 
 
 
@@ -309,13 +311,13 @@ chash (unsigned char b[2048])
 	      
 	      //shaの真似(mode 3)
 	      if(i%3==0){
-		v[i] = gf[ROTL8 (f[x1[i]], 5)]^ROTL8(key[i],i%8);
+		v[i] = gf[ROTL8 (f[x1[i]], 5)]^key[i];
 	      } 
 	      else if(i%11==0){
-		v[i] = gf[ROTL8 (f[x1[i]], 7)]^ROTL8(key[i],i%8);
+		v[i] = gf[ROTL8 (f[x1[i]], 7)]^key[i];
 	      }
 	      else{
-		v[i] = gf[ROTL8 (f[x1[i]], 2)]^ROTL8(key[i],i%8);
+		v[i] = gf[ROTL8 (f[x1[i]], 2)]^key[i];
 	      } 
 	      
 	    }
