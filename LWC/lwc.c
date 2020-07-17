@@ -309,13 +309,13 @@ chash (unsigned char b[2048])
 	      
 	      //shaの真似(mode 3)
 	      if(i%3==0){
-		v[i] = gf[ROTL8 (f[x1[i]], 5)+((i+17)%NN)]^key[i];
+		v[i] = gf[ROTL8 (f[x1[i]], 5)]^ROTL8(key[i],i%8);
 	      } 
 	      else if(i%11==0){
-		v[i] = gf[ROTL8 (f[x1[i]], 7)]^key[i];//+f[(i+13)%NN]];
+		v[i] = gf[ROTL8 (f[x1[i]], 7)]^ROTL8(key[i],i%8);
 	      }
 	      else{
-		v[i] = gf[ROTL8 (f[x1[i]], 2)+i]^key[i];//+f[i]];
+		v[i] = gf[ROTL8 (f[x1[i]], 2)]^ROTL8(key[i],i%8);
 	      } 
 	      
 	    }
@@ -336,18 +336,9 @@ chash (unsigned char b[2048])
 	{			//k=1;k<2048/NN;k++){
 	  for (i = 0; i < NN; i++){
 	    f[i] = b[count * NN + i];
-	    //printf("%02x",b[count*NN+i]);
-	    // f[i]^=c.ar[i];
 	  }
-	  //printf("\n");
 	}
-      /*
-      for(i=0;i<NN;i++){
-	n.c[count*NN+i]=f[i];
-	//printf("%c",f[i]);
-      }
-      //printf("\n");
-      */
+
       count++;
     }
 
@@ -386,6 +377,7 @@ hash (int argc, char *argv[])
 	}
       while ((n = fread (buf, 1, 2048, fp)) > 0)
 	{
+	  printf("@\n");
 	  /*
 	  //paddaing
 	  if(n<2048){
@@ -398,7 +390,7 @@ hash (int argc, char *argv[])
 	  a = chash (buf);
 	  
 	  for(j=0;j<2048;j++)
-	    printf("%c",a.c[j]);
+	    printf("%02x",a.c[j]);
 	  printf("\n");
 	  
 	  n = 0;
@@ -454,9 +446,11 @@ main (int argc, char *argv[])
        */
       t = hash (argc, argv);
 
+      /*
       //慎ましくここは256ビットだけ
       for (i = 0; i < 2048; i++)
 	printf ("%02x", t.c[i]);
+      */
       printf (" %s", argv[1]);
       printf ("\n");
 
