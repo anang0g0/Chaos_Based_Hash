@@ -14,6 +14,7 @@
 20200717
 
 Light Weight Cipherのつもり。
+できることなら一般化Feistel構造にしたい。
 
 LWC/lwc.c
 
