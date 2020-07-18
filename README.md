@@ -10,6 +10,17 @@
 
 カオス理論：https://ja.m.wikipedia.org/wiki/%E3%82%AB%E3%82%AA%E3%82%B9%E7%90%86%E8%AB%96
 
+
+20200717
+
+Light Weight Cipherのつもり。
+できることなら一般化Feistel構造にしたい。
+
+LWC/lwc.c
+
+
+20200716
+
 AES:https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.197.pdf
 
 SHA-3:https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf
