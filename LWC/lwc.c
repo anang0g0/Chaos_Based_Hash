@@ -329,20 +329,23 @@ enc (unsigned char b[2048])
 	
       
       memcpy (x1, z, sizeof (unsigned char) * NN);
-      
+
+      unsigned long long int u[NN/8]={0};
       
       for(k=0;k<10;k++){
 
-      
+	/*
 	a=tmp.ar[0];
 	for(i=1;i<NN;i++)
 	  key[i-1]=tmp.ar[i];
 	key[NN-1]=a;
-	for(i=0;i<NN;i++)
-	  tmp.ar[i]=key[i];
-	
-	memcpy(tmp.ar,key,sizeof(unsigned char)*NN);
+	*/
+	//memcpy(key,tmp.ar,sizeof(unsigned char)*NN);
 
+	for(i=0;i<NN/8;i++)
+	u[i]=ROTL64(tmp.u[i],3);
+	memcpy(tmp.u,u,sizeof(unsigned long long int)*(NN/8));
+	memcpy(key,tmp.ar,sizeof(unsigned char)*(NN));
 	
 	/*
 	for (l = 0; l < NN; l++)
@@ -482,19 +485,21 @@ dec (unsigned char b[2048])
       memcpy (x1, z, sizeof (unsigned char) * NN);
 	*/
 
-	/*
-	for(i=0;i<NN;i++)
-	key[i]=ROTL8(tmp.ar[i],3);
-	memcpy(tmp.ar,key,sizeof(unsigned char)*(NN));
-      */
 	
+	for(i=0;i<NN/8;i++)
+	u[i]=ROTL64(tmp.u[i],3);
+	memcpy(tmp.u,u,sizeof(unsigned long long int)*(NN/8));
+	memcpy(key,tmp.ar,sizeof(unsigned char)*(NN));
+	
+	/*
 	a=tmp.ar[0];
 	for(i=1;i<NN;i++)
 	  key[i-1]=tmp.ar[i];
 	key[NN-1]=a;
+	*/
 		
-	memcpy(tmp.ar,key,sizeof(unsigned char)*NN);
-
+	//memcpy(tmp.ar,key,sizeof(unsigned char)*NN);
+	
 	/*
       for(i=0;i<NN;i++){
 	key[i]=rand()%256;
@@ -586,7 +591,7 @@ hash (int argc, char *argv[])
 	  //memset(h.h,0,sizeof(h.h));
 
 	  a = enc (buf);
-	  
+	  /*
 	  for(j=0;j<n;j++)
 	    printf("%02x",a.c[j]);
 	  printf("\n");
@@ -596,7 +601,7 @@ hash (int argc, char *argv[])
       	  for(j=0;j<n;j++)
 	  printf("%c",b.c[j]);
 	  printf("\n");
-	  
+	  */
 	  n = 0;
 	}
     }
