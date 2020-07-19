@@ -73,7 +73,8 @@ arrayn c={0};
 //#define U8V(v) ((unsigned char)(v) & U8V(0xFF))
 #define U16V(v) ((u16)(v) & U16V(0xFFFF))
 //#define U32V(v) ((unsigned int )(v) & U32V(0xFFFFFFFF))
-#define U64V(v) ((unsigned long long int)(v) & U64V(0xFFFFFFFFFFFFFFFF))
+//#define U64C(v) (v##ULL)
+#define U64V(v) ((unsigned long long int)(v) & (0xFFFFFFFFFFFFFFFFULL))
 #define ROTL8(v, n) \
   (U8V((v) << (n)) | ((v) >> (8 - (n))))
 
@@ -295,13 +296,6 @@ enc (unsigned char b[2048])
 
   srand(111);
   //printf("in enc\n");
-  /*
-  for (i = 0; i < NN; i++){
-    salt[i] = rand ()%256;
-    printf("%d,",salt[i]);
-  }
-  printf("\n");
-  */
   for (i = 0; i < NN; i++)
     {
       inv_x[x0[i]] = i;
@@ -329,51 +323,50 @@ enc (unsigned char b[2048])
   for (j = 0; j < 2048/NN; j++)
     {
 
-	for (l = 0; l < NN; l++){
-	z[l] = x0[x1[inv_x[l]]];
+      
+	for (l = 0; l < NN; l++)
+	  z[l] = x0[x1[inv_x[l]]];
 	
-      }
+      
+      memcpy (x1, z, sizeof (unsigned char) * NN);
+      
+      
+      for(k=0;k<10;k++){
 
       
-      //memcpy (key, aa, sizeof (unsigned char) * NN);
-
-
-      //for(i=0;i<NN/4;i++)
-      //  tmp.d[i]=ROTL32(tmp.d[i],2);
-
-
-      memcpy (x1, z, sizeof (unsigned char) * NN);
-      for(k=0;k<11;k++){
-      //デバッグ中なので省略
-      //roun();
 	a=tmp.ar[0];
 	for(i=1;i<NN;i++)
 	  key[i-1]=tmp.ar[i];
 	key[NN-1]=a;
+	for(i=0;i<NN;i++)
+	  tmp.ar[i]=key[i];
+	
+	memcpy(tmp.ar,key,sizeof(unsigned char)*NN);
 
+	
+	/*
+	for (l = 0; l < NN; l++)
+	  z[l] = x0[x1[inv_x[l]]];
+	
+      memcpy (x1, z, sizeof (unsigned char) * NN);
+	*/
+	
+	//for(i=0;i<NN;i++)
+	//key[i]=rand()%256;
+	
       for (i = 0; i < NN; i++)
 	{
-	      //mode 2
-	      //f[i]^=Sbox[ROTL8(f[x1[i]],3)];//+f[i]];
+	  
+	  v[i] = Sbox[f[z[i]]]^key[i];//gf[f[z[i]]];
 
-	      
-	      //shaの真似(mode 3)
-	      // if(i%2==0){
-	  v[i] = Sbox[f[z[i]]^key[z[i]]];//gf[f[z[i]]];
-
-	      /*
-	      else if(i%11==0){
-		v[i] = gf[ROTL8 (f[x1[i]], 7)]^key[i];
-		}*/
-	      //else{
-		//v[i] = gf[f[x1[i]]];//^key[i];
-		//}
-	      
 	}
+      
       //roun();
-
-      memcpy (f, v, sizeof (unsigned char) * NN);
       }
+      memcpy (f, v, sizeof (unsigned char) * NN);      
+
+      //}
+
       //print for debugging
       for(i=0;i<NN;i++){
 	//printf("%02x",f[i]);
@@ -411,7 +404,9 @@ dec (unsigned char b[2048])
   arrayA n;
   arrayn tmp={0};
   unsigned char key[NN]={12,24,4,2,45,25,30,22,27,28,53,35,34,59,7,62,39,50,42,21,16,60,49,6,43,32,15,26,18,11,0,33,52,55,3,9,10,47,37,17,61,46,56,40,20,54,63,36,38,19,57,58,44,41,23,31,5,29,51,48,14,13,8,1};
+  arrayn key2={0};
 
+  
     unsigned char x0[NN]={12,24,4,2,45,25,30,22,27,28,53,35,34,59,7,62,39,50,42,21,16,60,49,6,43,32,15,26,18,11,0,33,52,55,3,9,10,47,37,17,61,46,56,40,20,54,63,36,38,19,57,58,44,41,23,31,5,29,51,48,14,13,8,1};
   unsigned char x1[NN]={49,13,8,28,27,63,2,39,34,46,12,45,41,4,1,42,35,21,50,26,10,47,56,57,11,5,53,14,0,43,29,33,40,36,38,51,20,30,7,6,19,60,3,48,58,23,55,32,59,61,9,16,62,25,31,24,22,54,52,15,18,44,37,17};
 
@@ -420,7 +415,7 @@ dec (unsigned char b[2048])
 
 //unsigned char x1[NN]={235,42,200,88,24,146,20,53,107,128,165,78,74,204,0,18,183,75,169,148,123,227,117,155,97,114,37,76,213,244,190,231,174,46,91,238,7,233,4,62,50,56,121,127,43,147,40,84,39,79,119,136,28,139,219,163,250,159,189,246,198,118,26,106,140,242,162,182,2,8,80,153,142,216,239,224,94,226,89,145,255,105,247,49,171,5,90,19,161,73,195,152,197,199,77,232,124,206,57,167,156,1,217,144,176,249,154,164,131,33,59,63,60,32,225,65,36,86,120,98,188,191,87,12,47,180,150,66,81,9,208,207,6,14,130,101,11,102,122,254,229,170,109,93,212,132,3,69,253,202,45,210,13,41,194,221,104,251,160,61,234,214,137,205,222,103,193,95,211,138,10,21,16,126,237,67,58,30,220,177,92,218,133,83,72,245,96,85,129,108,115,192,25,157,186,68,48,215,112,125,116,27,241,149,34,15,82,223,31,29,201,71,172,64,141,187,151,240,111,70,51,22,52,236,203,230,178,168,143,23,35,110,252,134,228,243,100,173,175,158,55,17,184,99,185,248,166,209,38,179,44,196,54,181,113,135};
 
- 
+  memcpy(key2.ar,key,sizeof(unsigned char)*NN); 
   unsigned char salt[NN] = { 0 };
 
   unsigned char z[NN]={0}, w[NN]={0},aa[NN]={0},a=0;
@@ -433,10 +428,7 @@ dec (unsigned char b[2048])
 
   srand(111);
   printf("in dec\n");
-  for (i = 0; i < NN; i++){
-    salt[i] = rand ()%256;
-    printf("%d,",salt[i]);
-  }
+
   printf("\n");
   //  exit(1);
   
@@ -463,56 +455,73 @@ dec (unsigned char b[2048])
   for (j = 0; j < 2048/NN; j++)
     {
 
-      for (l = 0; l < NN; l++){
+      
+      for (l = 0; l < NN; l++)
 	z[l] = x0[x1[inv_x[l]]];
-	
-      }
+      
 
 	for(l=0;l<NN;l++)
 	w[z[l]]=l;
 
-      //for(i=0;i<NN/4;i++)
-      //  tmp.d[i]=ROTL32(tmp.d[i],2);
-
-      //      roun();
-
-      //memcpy (key, aa, sizeof (unsigned char) * NN);
       memcpy (x1, z, sizeof (unsigned char) * NN);
-      for(k=0;k<11;k++){
+      
+      
+      unsigned long long int u[NN/8]={0};
+
+      for(k=0;k<10;k++){
+	
+	/*
+      for (l = 0; l < NN; l++)
+	z[l] = x0[x1[inv_x[l]]];
+
+      
+
+      //for(l=0;l<NN;l++)
+      //w[z[l]]=l;
+
+      memcpy (x1, z, sizeof (unsigned char) * NN);
+	*/
+
+	/*
+	for(i=0;i<NN;i++)
+	key[i]=ROTL8(tmp.ar[i],3);
+	memcpy(tmp.ar,key,sizeof(unsigned char)*(NN));
+      */
+	
 	a=tmp.ar[0];
 	for(i=1;i<NN;i++)
 	  key[i-1]=tmp.ar[i];
 	key[NN-1]=a;
-	
-	for (i = 0; i < NN; i++)
+		
+	memcpy(tmp.ar,key,sizeof(unsigned char)*NN);
+
+	/*
+      for(i=0;i<NN;i++){
+	key[i]=rand()%256;
+      }
+	*/
+	/*
+	//#pragma omp parallel for
+	for(i=0;i<NN;i++)
+	  key[i]=tmp.ar[z[i]];
+	memcpy(tmp.ar,key,sizeof(unsigned char)*NN);
+	*/
+      for (i = 0; i < NN; i++)
 	{
-	      
-	      //mode 2
-	      //f[i]^=Sbox[ROTL8(f[x1[i]],3)];//+f[i]];
 
-	      
-	      //shaの真似(mode 3)
-	      //if(i%2==0){
-	  v[i]=invSbox[f[i]]^key[z[i]];
-
-	      
-	      /*
-	      else if(i%11==0){
-		v[i] = gf[ROTL8 (f[x1[i]], 7)]^key[i];
-		}*/
-	      //else{
-		//v[x1[i]] = fg[f[i]];//^key[i];
-		//} 
-	      
+	  v[i]=invSbox[f[i]^key[i]];//^key[i];
+	    	      
 	}
       
       //roun();
-      
+      }      
       
       for(i=0;i<NN;i++)
 	f[i]=v[w[i]];
       //memcpy (f, v, sizeof (unsigned char) * NN);
-      }    
+
+      //}
+      
       //print for debugging
       for(i=0;i<NN;i++){
 	//printf("%c",f[i]);
