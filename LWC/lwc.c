@@ -253,7 +253,7 @@ enc (unsigned char b[2048])
   
   unsigned char y1[32]={20,7,26,9,6,12,8,16,15,22,23,17,29,25,10,24,30,28,27,31,18,13,19,14,4,1,3,11,0,2,5,21};
   
-  unsigned char rnd[32]={0};
+  unsigned char rnd[NN]={0};
   unsigned char inv[32]={0};
  
   unsigned char salt[NN] = { 0 };	//={ 148, 246, 52, 251, 16, 194, 72, 150, 249, 23, 90, 107, 151, 42, 154, 124, 48, 58, 30, 24, 42, 33, 38, 10, 115, 41, 164, 16, 33, 32, 252, 143, 86, 175, 8, 132, 103, 231, 95, 190, 61, 29, 215, 75, 251, 248, 72, 48, 224, 200, 147, 93, 112, 25, 227, 223, 206, 137, 51, 88, 109, 214, 17, 172};
@@ -292,6 +292,7 @@ enc (unsigned char b[2048])
   memcpy (v, f, sizeof (unsigned char) * NN);
   memcpy(tmp.d,key,sizeof(unsigned char)*32);//Sbox[key[z[i]]];
   //バッファを埋める回数だけ回す
+  unsigned long long int u[NN/8]={0};
   for (j = 0; j < 2048/NN; j++)
     {
 
@@ -300,27 +301,31 @@ enc (unsigned char b[2048])
       
       memcpy (x1, z, sizeof (unsigned char) * NN);
 
-      //round
-      for(k=0;k<10;k++){
-
       unsigned long long int u[4]={0};
+      unsigned int cc=0;
+      unsigned char g[NN]={0};
 
-      //generate subkey
-      for(l=0;l<6;l++){
-      for(i=0;i<32;i++)
-	rnd[i]=y0[y1[inv[i]]];
-      memcpy(y1,rnd,sizeof(unsigned char)*32);
-      for(i=0;i<32;i++)
-	key[i]^=Sbox[ROTL8(key[y1[i]],3)];
+      //round
+      for(k=0;k<10;k++){	
+
+      //roundabount
+      for(i=0;i<4;i++){
+	if(i%2==0)
+	  u[i+1]^=ROTL64(tmp.u[i],13);
+	if(i%2==1)
+	  u[i+1]^=ROTR64(tmp.u[i],7);
+	if(i%2==0)
+	  u[i]^=ROTL64(tmp.u[i],17);
       }
+
       memcpy(tmp.u,u,sizeof(unsigned long long int)*(4));
       memcpy(key,tmp.d,sizeof(unsigned char)*(32));
       
-	
+		
       for (i = 0; i < NN; i++)
 	{
-	  
-	  v[i] = Sbox[f[z[i]]]^key[i%32];//gf[f[z[i]]];
+
+	  v[i]=invSbox[f[i]^key[i%32]];//^key[i];
 	  
 	}
       
@@ -444,18 +449,29 @@ unsigned char y1[32]={20,7,26,9,6,12,8,16,15,22,23,17,29,25,10,24,30,28,27,31,18
       unsigned long long int u[4]={0};
 
       //round
-      for(k=0;k<16;k++){
-
+      for(k=0;k<10;k++){
 	//generate subkey
-	for(l=0;l<6;l++){
-	for(i=0;i<32;i++)
-	  rnd[i]=y0[y1[inv[i]]];
-	memcpy(y1,rnd,sizeof(unsigned char)*32);
-	for(i=0;i<32;i++)
-	  key[i]^=Sbox[ROTL8(key[y1[i]],3)];
+	
+
+      
+
+	//鍵スケジューリング（適当）
+	a=tmp.d[0];
+	for(i=1;i<32;i++)
+	  key[i-1]=tmp.d[i];
+	key[31]=a;
+	
+	//roundabout
+	for(i=0;i<4;i++){
+	  if(i%2==0)
+	    u[i]=ROTL64(tmp.u[i],13);
+	  if(i%2==1)
+	    u[i]=ROTR64(tmp.u[i],7);
 	}
 	memcpy(tmp.u,u,sizeof(unsigned long long int)*(4));
 	memcpy(key,tmp.d,sizeof(unsigned char)*(32));
+	
+	
 	
       for (i = 0; i < NN; i++)
 	{
