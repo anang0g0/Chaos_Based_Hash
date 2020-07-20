@@ -100,7 +100,14 @@ arrayn c={0};
 
 
 unsigned char inv_x[NN] = { 0 };
-
+/*
+unsigned char key[32]={
+12,24,4,2,45,25,30,22,27,28,
+    53,35,34,59,7,62,39,50,42,21,
+    16,60,49,6,43,32,15,26,18,11,
+    0,33};
+*/
+unsigned char key[32]={0};
 
 
 
@@ -229,6 +236,7 @@ seed (void)
 
 }
 
+
 //ハッシュ関数本体
 arrayA
 enc (unsigned char b[2048])
@@ -236,11 +244,7 @@ enc (unsigned char b[2048])
   int i, j ,p= 0;
   arrayA n;
   arrayull tmp={0};
-  unsigned char key[32]={
-    12,24,4,2,45,25,30,22,27,28,
-    53,35,34,59,7,62,39,50,42,21,
-    16,60,49,6,43,32,15,26,18,11,
-    0,33};
+
   unsigned char x0[NN]={12,24,4,2,45,25,30,22,27,28,53,35,34,59,7,62,39,50,42,21,16,60,49,6,43,32,15,26,18,11,0,33,52,55,3,9,10,47,37,17,61,46,56,40,20,54,63,36,38,19,57,58,44,41,23,31,5,29,51,48,14,13,8,1};
   unsigned char x1[NN]={49,13,8,28,27,63,2,39,34,46,12,45,41,4,1,42,35,21,50,26,10,47,56,57,11,5,53,14,0,43,29,33,40,36,38,51,20,30,7,6,19,60,3,48,58,23,55,32,59,61,9,16,62,25,31,24,22,54,52,15,18,44,37,17};
 
@@ -249,8 +253,18 @@ enc (unsigned char b[2048])
 
   //unsigned char x1[NN]={235,42,200,88,24,146,20,53,107,128,165,78,74,204,0,18,183,75,169,148,123,227,117,155,97,114,37,76,213,244,190,231,174,46,91,238,7,233,4,62,50,56,121,127,43,147,40,84,39,79,119,136,28,139,219,163,250,159,189,246,198,118,26,106,140,242,162,182,2,8,80,153,142,216,239,224,94,226,89,145,255,105,247,49,171,5,90,19,161,73,195,152,197,199,77,232,124,206,57,167,156,1,217,144,176,249,154,164,131,33,59,63,60,32,225,65,36,86,120,98,188,191,87,12,47,180,150,66,81,9,208,207,6,14,130,101,11,102,122,254,229,170,109,93,212,132,3,69,253,202,45,210,13,41,194,221,104,251,160,61,234,214,137,205,222,103,193,95,211,138,10,21,16,126,237,67,58,30,220,177,92,218,133,83,72,245,96,85,129,108,115,192,25,157,186,68,48,215,112,125,116,27,241,149,34,15,82,223,31,29,201,71,172,64,141,187,151,240,111,70,51,22,52,236,203,230,178,168,143,23,35,110,252,134,228,243,100,173,175,158,55,17,184,99,185,248,166,209,38,179,44,196,54,181,113,135};
 
-  unsigned long long int u[4]={0}; 
-  unsigned char salt[NN] = { 0 };	//={ 148, 246, 52, 251, 16, 194, 72, 150, 249, 23, 90, 107, 151, 42, 154, 124, 48, 58, 30, 24, 42, 33, 38, 10, 115, 41, 164, 16, 33, 32, 252, 143, 86, 175, 8, 132, 103, 231, 95, 190, 61, 29, 215, 75, 251, 248, 72, 48, 224, 200, 147, 93, 112, 25, 227, 223, 206, 137, 51, 88, 109, 214, 17, 172};
+  /*  
+  unsigned char key[32]={12,24,4,2,45,25,30,22,27,28,
+    53,35,34,59,7,62,39,50,42,21,
+    16,60,49,6,43,32,15,26,18,11,
+    0,33};
+  */
+  
+  unsigned char key2[32]={0};  
+  unsigned long long int u[4]; 
+  unsigned char salt[NN] = { 0 };
+
+  //={ 148, 246, 52, 251, 16, 194, 72, 150, 249, 23, 90, 107, 151, 42, 154, 124, 48, 58, 30, 24, 42, 33, 38, 10, 115, 41, 164, 16, 33, 32, 252, 143, 86, 175, 8, 132, 103, 231, 95, 190, 61, 29, 215, 75, 251, 248, 72, 48, 224, 200, 147, 93, 112, 25, 227, 223, 206, 137, 51, 88, 109, 214, 17, 172};
 
   unsigned char z[NN]={0}, w[NN]={0},aa[NN]={0},a=0;
   unsigned char v[NN] = { 0 }, f[NN] = { 0 };
@@ -259,7 +273,16 @@ enc (unsigned char b[2048])
   int  count = 1;
   time_t t;
   int k;
+  unsigned char rnd[32]={0};
+  unsigned char inv[32]={0};
+  unsigned char  y0[32]={27,24,23,6,18,12,11,14,4,5,2,29,22,1,3,17,15,21,31,26,19,30,0,8,28,7,20,13,10,25,16,9};
+  
+  unsigned char y1[32]={20,7,26,9,6,12,8,16,15,22,23,17,29,25,10,24,30,28,27,31,18,13,19,14,4,1,3,11,0,2,5,21};
 
+  for(i=0;i<32;i++)
+    inv[y0[i]]=i;
+
+  
   srand(111);
   //printf("in enc\n");
   for (i = 0; i < NN; i++)
@@ -286,6 +309,7 @@ enc (unsigned char b[2048])
   memcpy (v, f, sizeof (unsigned char) * NN);
   memcpy(tmp.d,key,sizeof(unsigned char)*32);//Sbox[key[z[i]]];
   //バッファを埋める回数だけ回す
+  printf("--------------------------------------------------------begin\n");
   for (j = 0; j < 2048/NN; j++)
     {
 
@@ -294,33 +318,34 @@ enc (unsigned char b[2048])
       
       memcpy (x1, z, sizeof (unsigned char) * NN);
       
-	
+      //round
       for(k=0;k<10;k++){
-	
 	//鍵スケジューリング（適当）      
 	for(i=0;i<4;i++){
 	  if(i%3==0)
 	    u[i]=ROTL64(tmp.u[i],13);
 	  if(i%3==1)
-	  u[i]=ROTR64(tmp.u[i],7);
+	    u[i]=ROTR64(tmp.u[i],7);
 	  if(i%3==2)
 	    u[i]=ROTR64(tmp.u[i],17);
 	}
-	memcpy(tmp.u,u,sizeof(unsigned long long int)*(4));
-	memcpy(key,tmp.d,sizeof(unsigned char)*(32));      
-	/*
+	
 	for(i=0;i<4;i++){
 	  printf("%llu,",u[i]);
 	  printf("\n");
-	  if(u[i]==14061821610470507203ULL)
+	  if(u[i]==14061821610470507203ULL)//4469606172994116635ULL)
 	    scanf("&d",&p);
 	}
-	*/
+	
+	memcpy(tmp.u,u,sizeof(unsigned long long int)*(4));
+	memcpy(key2,tmp.d,sizeof(unsigned char)*(32));      
+	
+	
 	
 	for (i = 0; i < NN; i++)
 	{
 	  
-	  v[i] = Sbox[f[z[i]]]^key[i%32];//gf[f[z[i]]];
+	  v[i] = Sbox[f[z[i]]]^key2[i%32];//gf[f[z[i]]];
 	  
 	}
       
@@ -366,11 +391,8 @@ dec (unsigned char b[2048])
   int i, j = 0;
   arrayA n;
   arrayull tmp={0};
-  unsigned char key[32]={
-    12,24,4,2,45,25,30,22,27,28,
-    53,35,34,59,7,62,39,50,42,21,
-    16,60,49,6,43,32,15,26,18,11,
-    0,33};
+  
+  unsigned char key1[32]={0};  
   arrayull key2={0};
 
   
@@ -384,7 +406,7 @@ dec (unsigned char b[2048])
 
 //  memcpy(key2.ar,key,sizeof(unsigned char)*NN); 
   unsigned char salt[NN] = { 0 };
-  unsigned long long int u[4]={0};
+  unsigned long long int u[4];
   unsigned char z[NN]={0}, w[NN]={0},aa[NN]={0},a=0;
   unsigned char v[NN] = { 0 }, f[NN] = { 0 };
   unsigned char inv_y[NN];
@@ -392,7 +414,12 @@ dec (unsigned char b[2048])
   int  count = 1;
   time_t t;
   int k;
+  unsigned char rnd[32]={0},inv[32]={0};
 
+  unsigned char  y0[32]={27,24,23,6,18,12,11,14,4,5,2,29,22,1,3,17,15,21,31,26,19,30,0,8,28,7,20,13,10,25,16,9};
+  
+  unsigned char y1[32]={20,7,26,9,6,12,8,16,15,22,23,17,29,25,10,24,30,28,27,31,18,13,19,14,4,1,3,11,0,2,5,21};
+  
   srand(111);
   printf("in dec\n");
 
@@ -432,10 +459,9 @@ dec (unsigned char b[2048])
 
       memcpy (x1, z, sizeof (unsigned char) * NN);
       
-      
+      //round
      for(k=0;k<10;k++){
-
-      //roundabount
+      //サブキー
       for(i=0;i<4;i++){
 	if(i%3==0)
 	  u[i]=ROTL64(tmp.u[i],13);
@@ -445,13 +471,13 @@ dec (unsigned char b[2048])
 	  u[i]=ROTR64(tmp.u[i],17);
       }
       memcpy(tmp.u,u,sizeof(unsigned long long int)*(4));
-      memcpy(key,tmp.d,sizeof(unsigned char)*(32));      
+      memcpy(key1,tmp.d,sizeof(unsigned char)*(32));      
       
       
       for (i = 0; i < NN; i++)
 	{
 
-	  v[i]=invSbox[f[i]^key[i%32]];//^key[i];
+	  v[i]=invSbox[f[i]^key1[i%32]];//^key[i];
 	    	      
 	}
       
@@ -505,6 +531,21 @@ hash (int argc, char *argv[])
   arrayA a = { 0 };
   arrayA b = { 0 };
 
+  unsigned char kkk[32]={
+    12,24,4,2,45,25,30,22,27,28,
+    53,35,34,59,7,62,39,50,42,21,
+    16,60,49,6,43,32,15,26,18,11,
+    0,33};
+
+  unsigned char rnd[32]={0},inv[32]={0};
+
+  unsigned char  y0[32]={27,24,23,6,18,12,11,14,4,5,2,29,22,1,3,17,15,21,31,26,19,30,0,8,28,7,20,13,10,25,16,9};
+  
+  unsigned char y1[32]={20,7,26,9,6,12,8,16,15,22,23,17,29,25,10,24,30,28,27,31,18,13,19,14,4,1,3,11,0,2,5,21};
+
+  //
+  for(i=0;i<32;i++)
+    inv[y0[i]]=i;
 
   if (BYTE)
     {
@@ -515,6 +556,7 @@ hash (int argc, char *argv[])
 	  printf ("no file\n");
 	  exit (1);
 	}
+       memcpy(key,kkk,sizeof(unsigned char)*32);
       while ((n = fread (buf, 1, 2048, fp)) > 0)
 	{
 	  //printf("@\n");
@@ -525,14 +567,23 @@ hash (int argc, char *argv[])
 	      buf[i]=0xc6;
 	  }
 	  
-	  //memset(h.h,0,sizeof(h.h));
+	  //memset(key,0,sizeof(key));
+	for(i=0;i<32;i++)
+	  rnd[i]=y0[y1[inv[i]]];
+	memcpy(y1,rnd,sizeof(unsigned char)*32);
+	for(i=0;i<32;i++)
+	key[i]^=key[rnd[i]];
 
+	 
+	  
 	  a = enc (buf);
 	  
 	  for(j=0;j<n;j++)
 	    printf("%02x",a.c[j]);
 	  printf("\n");
-	  
+	  // exit(1);
+	  //memset(key,0,sizeof(key));
+	  //memcpy(key,kkk,sizeof(unsigned char)*32);
 	  
 	  b=dec(a.c);
       	  for(j=0;j<n;j++)
@@ -579,6 +630,7 @@ main (int argc, char *argv[])
   arrayul p;
   arrayA t;
 
+     
   if (BYTE)
     {
 
