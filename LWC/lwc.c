@@ -160,8 +160,6 @@ static unsigned char invSbox[256] = {
 
 
 
-
-
 //言わずと知れたxorshift
 unsigned int
 xor (void)
@@ -301,22 +299,28 @@ enc (unsigned char b[2048])
 
       unsigned long long int u[4]={0};
       
-
-	for(i=0;i<4;i++){
-	  if(i%2==0)
-	    u[i]=ROTL64(tmp.u[i],3);
-	  if(i%2==1)
-	    u[i]=ROTL64(tmp.u[i],7);
-	}
-	memcpy(tmp.u,u,sizeof(unsigned long long int)*(4));
-	memcpy(key,tmp.d,sizeof(unsigned char)*(32));
-
+      //鍵スケジューリング（適当）      
+      a=tmp.d[0];
+      for(i=1;i<32;i++)
+      key[i-1]=tmp.d[i];
+      key[31]=a;
+      
+      //roundabount
+      for(i=0;i<4;i++){
+	if(i%2==0)
+	  u[i]=ROTL64(tmp.u[i],13);
+	if(i%2==1)
+	  u[i]=ROTR64(tmp.u[i],7);
+      }
+      memcpy(tmp.u,u,sizeof(unsigned long long int)*(4));
+      memcpy(key,tmp.d,sizeof(unsigned char)*(32));
+      
 	
       for (i = 0; i < NN; i++)
 	{
 	  
 	  v[i] = Sbox[f[z[i]]]^key[i%32];//gf[f[z[i]]];
-
+	  
 	}
       
       //roun();
@@ -432,25 +436,18 @@ dec (unsigned char b[2048])
 
       for(k=0;k<10;k++){
 
+	//鍵スケジューリング（適当）
+	a=tmp.d[0];
+	for(i=1;i<32;i++)
+	  key[i-1]=tmp.d[i];
+	key[31]=a;
 	
-	/*
-      for (l = 0; l < NN; l++)
-	z[l] = x0[x1[inv_x[l]]];
-
-      
-
-      //for(l=0;l<NN;l++)
-      //w[z[l]]=l;
-
-      memcpy (x1, z, sizeof (unsigned char) * NN);
-	*/
-
-	
+	//roundabout
 	for(i=0;i<4;i++){
 	  if(i%2==0)
-	    u[i]=ROTL64(tmp.u[i],3);
+	    u[i]=ROTL64(tmp.u[i],13);
 	  if(i%2==1)
-	    u[i]=ROTL64(tmp.u[i],7);
+	    u[i]=ROTR64(tmp.u[i],7);
 	}
 	memcpy(tmp.u,u,sizeof(unsigned long long int)*(4));
 	memcpy(key,tmp.d,sizeof(unsigned char)*(32));
@@ -469,7 +466,7 @@ dec (unsigned char b[2048])
 	f[i]=v[w[i]];
       //memcpy (f, v, sizeof (unsigned char) * NN);
 
-      //}
+      
       
       //print for debugging
       for(i=0;i<NN;i++){
