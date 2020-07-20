@@ -446,6 +446,7 @@ dec (unsigned char b[2048])
   memcpy (v, f, sizeof (unsigned char) * NN);
   memcpy(tmp.d,key,sizeof(unsigned char)*32);
   //バッファを埋める回数だけ回す
+  printf("end--------------------------------------------------\n");
   for (j = 0; j < 2048/NN; j++)
     {
 
@@ -473,6 +474,13 @@ dec (unsigned char b[2048])
       memcpy(tmp.u,u,sizeof(unsigned long long int)*(4));
       memcpy(key1,tmp.d,sizeof(unsigned char)*(32));      
       
+	for(i=0;i<4;i++){
+	  printf("%llu,",u[i]);
+	  printf("\n");
+	  if(u[i]==14061821610470507203ULL)//4469606172994116635ULL)
+	    scanf("&d",&p);
+	}
+
       
       for (i = 0; i < NN; i++)
 	{
