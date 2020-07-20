@@ -294,64 +294,29 @@ enc (unsigned char b[2048])
       
       memcpy (x1, z, sizeof (unsigned char) * NN);
       
+	
       for(k=0;k<10;k++){
-
-	/*
-      //鍵スケジューリング（適当）      
-      a=tmp.d[0];
-      for(i=1;i<32;i++)
-	key[i-1]=tmp.d[i];
-      key[31]=a;
-      memcpy(tmp.d,key,sizeof(unsigned char)*32);
-      //roundabount
-      for(i=0;i<4;i++){
-	if(i%3==0)
-	  u[i]=ROTL64(tmp.u[i],13);
-	if(i%3==1)
-	  u[i]=ROTR64(tmp.u[i],7);
-	if(i%3==2)
-	  u[i]=ROTL64(tmp.u[i],17);
-      }
-      
-      for(i=0;i<4;i++)
-      printf("%llu,",u[i]);
-      printf("\n");
-      if(u[i]==14061821610470507203ULL)
-	scanf("%d",&p);
-      //}
-      exit(1);
-      
-      //memcpy(tmp.u,u,sizeof(unsigned long long int)*(4));
-      //memcpy(key,tmp.d,sizeof(unsigned char)*(32));
-      */
 	
-
-      //鍵スケジューリング（適当）      
-	
-	a=tmp.d[0];
-      for(i=1;i<32;i++)
-      key[i-1]=tmp.d[i];
-      key[31]=a;
-      memcpy(tmp.d,key,sizeof(unsigned char)*32);
-      //roundabount
-      for(i=0;i<4;i++){
-	if(i%3==0)
-	  u[i]=ROTL64(tmp.u[i],13);
-	if(i%3==1)
+	//鍵スケジューリング（適当）      
+	for(i=0;i<4;i++){
+	  if(i%3==0)
+	    u[i]=ROTL64(tmp.u[i],13);
+	  if(i%3==1)
 	  u[i]=ROTR64(tmp.u[i],7);
-	if(i%3==2)
-	  u[i]=ROTR64(tmp.u[i],17);
-      }
-      memcpy(tmp.u,u,sizeof(unsigned long long int)*(4));
-      memcpy(key,tmp.d,sizeof(unsigned char)*(32));
-      /*
-      for(i=0;i<4;i++){
-	printf("%llu,",u[i]);
-      printf("\n");
-      if(u[i]==14106159828061848418ULL)
-	scanf("&d",&p);
-      }
-      */
+	  if(i%3==2)
+	    u[i]=ROTR64(tmp.u[i],17);
+	}
+	memcpy(tmp.u,u,sizeof(unsigned long long int)*(4));
+	memcpy(key,tmp.d,sizeof(unsigned char)*(32));      
+      
+	for(i=0;i<4;i++){
+	  printf("%llu,",u[i]);
+	  printf("\n");
+	  if(u[i]==14061821610470507203ULL)
+	    scanf("&d",&p);
+	}
+	
+	
 	for (i = 0; i < NN; i++)
 	{
 	  
@@ -468,17 +433,8 @@ dec (unsigned char b[2048])
       memcpy (x1, z, sizeof (unsigned char) * NN);
       
       
-      
+     for(k=0;k<10;k++){
 
-      for(k=0;k<10;k++){
-
-	
-      //鍵スケジューリング（適当）      
-      a=tmp.d[0];
-      for(i=1;i<32;i++)
-      key[i-1]=tmp.d[i];
-      key[31]=a;
-      memcpy(tmp.d,key,sizeof(unsigned char)*32);      
       //roundabount
       for(i=0;i<4;i++){
 	if(i%3==0)
@@ -489,7 +445,8 @@ dec (unsigned char b[2048])
 	  u[i]=ROTR64(tmp.u[i],17);
       }
       memcpy(tmp.u,u,sizeof(unsigned long long int)*(4));
-      memcpy(key,tmp.d,sizeof(unsigned char)*(32));
+      memcpy(key,tmp.d,sizeof(unsigned char)*(32));      
+      
       
       for (i = 0; i < NN; i++)
 	{
