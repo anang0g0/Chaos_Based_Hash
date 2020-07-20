@@ -233,7 +233,7 @@ seed (void)
 arrayA
 enc (unsigned char b[2048])
 {
-  int i, j = 0;
+  int i, j ,p= 0;
   arrayA n;
   arrayull tmp={0};
   unsigned char key[32]={
@@ -249,7 +249,7 @@ enc (unsigned char b[2048])
 
   //unsigned char x1[NN]={235,42,200,88,24,146,20,53,107,128,165,78,74,204,0,18,183,75,169,148,123,227,117,155,97,114,37,76,213,244,190,231,174,46,91,238,7,233,4,62,50,56,121,127,43,147,40,84,39,79,119,136,28,139,219,163,250,159,189,246,198,118,26,106,140,242,162,182,2,8,80,153,142,216,239,224,94,226,89,145,255,105,247,49,171,5,90,19,161,73,195,152,197,199,77,232,124,206,57,167,156,1,217,144,176,249,154,164,131,33,59,63,60,32,225,65,36,86,120,98,188,191,87,12,47,180,150,66,81,9,208,207,6,14,130,101,11,102,122,254,229,170,109,93,212,132,3,69,253,202,45,210,13,41,194,221,104,251,160,61,234,214,137,205,222,103,193,95,211,138,10,21,16,126,237,67,58,30,220,177,92,218,133,83,72,245,96,85,129,108,115,192,25,157,186,68,48,215,112,125,116,27,241,149,34,15,82,223,31,29,201,71,172,64,141,187,151,240,111,70,51,22,52,236,203,230,178,168,143,23,35,110,252,134,228,243,100,173,175,158,55,17,184,99,185,248,166,209,38,179,44,196,54,181,113,135};
 
- 
+  unsigned long long int u[4]={0}; 
   unsigned char salt[NN] = { 0 };	//={ 148, 246, 52, 251, 16, 194, 72, 150, 249, 23, 90, 107, 151, 42, 154, 124, 48, 58, 30, 24, 42, 33, 38, 10, 115, 41, 164, 16, 33, 32, 252, 143, 86, 175, 8, 132, 103, 231, 95, 190, 61, 29, 215, 75, 251, 248, 72, 48, 224, 200, 147, 93, 112, 25, 227, 223, 206, 137, 51, 88, 109, 214, 17, 172};
 
   unsigned char z[NN]={0}, w[NN]={0},aa[NN]={0},a=0;
@@ -296,15 +296,13 @@ enc (unsigned char b[2048])
       
       for(k=0;k<10;k++){
 
-
-      unsigned long long int u[4]={0};
-      
+	/*
       //鍵スケジューリング（適当）      
       a=tmp.d[0];
       for(i=1;i<32;i++)
-      key[i-1]=tmp.d[i];
+	key[i-1]=tmp.d[i];
       key[31]=a;
-      
+      memcpy(tmp.d,key,sizeof(unsigned char)*32);
       //roundabount
       for(i=0;i<4;i++){
 	if(i%3==0)
@@ -312,19 +310,49 @@ enc (unsigned char b[2048])
 	if(i%3==1)
 	  u[i]=ROTR64(tmp.u[i],7);
 	if(i%3==2)
-	 u[i]=ROTL64(tmp.u[i],17);
+	  u[i]=ROTL64(tmp.u[i],17);
       }
-      /*
+      
       for(i=0;i<4;i++)
       printf("%llu,",u[i]);
       printf("\n");
+      if(u[i]==14061821610470507203ULL)
+	scanf("%d",&p);
+      //}
       exit(1);
+      
+      //memcpy(tmp.u,u,sizeof(unsigned long long int)*(4));
+      //memcpy(key,tmp.d,sizeof(unsigned char)*(32));
       */
+	
+
+      //鍵スケジューリング（適当）      
+	
+	a=tmp.d[0];
+      for(i=1;i<32;i++)
+      key[i-1]=tmp.d[i];
+      key[31]=a;
+      memcpy(tmp.d,key,sizeof(unsigned char)*32);
+      //roundabount
+      for(i=0;i<4;i++){
+	if(i%3==0)
+	  u[i]=ROTL64(tmp.u[i],13);
+	if(i%3==1)
+	  u[i]=ROTR64(tmp.u[i],7);
+	if(i%3==2)
+	  u[i]=ROTR64(tmp.u[i],17);
+      }
       memcpy(tmp.u,u,sizeof(unsigned long long int)*(4));
       memcpy(key,tmp.d,sizeof(unsigned char)*(32));
-      
-	
-      for (i = 0; i < NN; i++)
+      /*
+      for(i=0;i<4;i++){
+	printf("%llu,",u[i]);
+      printf("\n");
+      if(u[i]==14106159828061848418ULL)
+	scanf("&d",&p);
+      }
+      */
+	for (i = 0; i < NN; i++)
 	{
 	  
 	  v[i] = Sbox[f[z[i]]]^key[i%32];//gf[f[z[i]]];
@@ -391,7 +419,7 @@ dec (unsigned char b[2048])
 
 //  memcpy(key2.ar,key,sizeof(unsigned char)*NN); 
   unsigned char salt[NN] = { 0 };
-
+  unsigned long long int u[4]={0};
   unsigned char z[NN]={0}, w[NN]={0},aa[NN]={0},a=0;
   unsigned char v[NN] = { 0 }, f[NN] = { 0 };
   unsigned char inv_y[NN];
@@ -440,29 +468,29 @@ dec (unsigned char b[2048])
       memcpy (x1, z, sizeof (unsigned char) * NN);
       
       
-      unsigned long long int u[4]={0};
+      
 
       for(k=0;k<10;k++){
 
-	//鍵スケジューリング（適当）
-	a=tmp.d[0];
-	for(i=1;i<32;i++)
-	  key[i-1]=tmp.d[i];
-	key[31]=a;
 	
-	//roundabout
-	for(i=0;i<4;i++){
-	  if(i%3==0)
-	    u[i]=ROTL64(tmp.u[i],13);
-	  if(i%3==1)
-	    u[i]=ROTR64(tmp.u[i],7);
-	  if(i%3==2)
-	    u[i]=ROTL64(tmp.u[i],17);
-	}
-	
-	memcpy(tmp.u,u,sizeof(unsigned long long int)*(4));
-	memcpy(key,tmp.d,sizeof(unsigned char)*(32));
-	
+      //鍵スケジューリング（適当）      
+      a=tmp.d[0];
+      for(i=1;i<32;i++)
+      key[i-1]=tmp.d[i];
+      key[31]=a;
+      memcpy(tmp.d,key,sizeof(unsigned char)*32);      
+      //roundabount
+      for(i=0;i<4;i++){
+	if(i%3==0)
+	  u[i]=ROTL64(tmp.u[i],13);
+	if(i%3==1)
+	  u[i]=ROTR64(tmp.u[i],7);
+	if(i%3==2)
+	  u[i]=ROTR64(tmp.u[i],17);
+      }
+      memcpy(tmp.u,u,sizeof(unsigned long long int)*(4));
+      memcpy(key,tmp.d,sizeof(unsigned char)*(32));
+      
       for (i = 0; i < NN; i++)
 	{
 
