@@ -308,14 +308,14 @@ enc (unsigned char b[2048])
 	}
 	memcpy(tmp.u,u,sizeof(unsigned long long int)*(4));
 	memcpy(key,tmp.d,sizeof(unsigned char)*(32));      
-      
+	/*
 	for(i=0;i<4;i++){
 	  printf("%llu,",u[i]);
 	  printf("\n");
 	  if(u[i]==14061821610470507203ULL)
 	    scanf("&d",&p);
 	}
-	
+	*/
 	
 	for (i = 0; i < NN; i++)
 	{
