@@ -18,7 +18,7 @@ https://www.ai-gakkai.or.jp/jsai2014/webprogram/2014/pdf/64.pdf
 へえー、英語なんか読めなくても安全な秘密鍵暗号って作れるんですね。
 私も頑張ろうっと。
 
-https://ja.wikipedia.org/wiki/%E9%96%A2%E9%80%A3%E9%8D%B5%E6%94%BB%E6%92%83
+https://ja.wikipedia.org/wiki/Advanced_Encryption_Standard
 
 これによるとAESは既に9段まで（仕様では10段）解読されているらしいので、私たちはさんざん大騒ぎした挙句、結局弱い暗号をつかまされたことになるかもしれないです。
 その点のことを雷電さんはどう思っているのでしょうか？
