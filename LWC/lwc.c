@@ -308,7 +308,7 @@ enc (unsigned char b[2048])
       //round
       for(k=0;k<10;k++){	
 
-      //roundabount
+      //subkey
       for(i=0;i<4;i++){
 	if(i%2==0)
 	  u[i+1]^=ROTL64(tmp.u[i],13);
@@ -461,13 +461,16 @@ unsigned char y1[32]={20,7,26,9,6,12,8,16,15,22,23,17,29,25,10,24,30,28,27,31,18
 	  key[i-1]=tmp.d[i];
 	key[31]=a;
 	
-	//roundabout
+	//subkey
 	for(i=0;i<4;i++){
 	  if(i%2==0)
-	    u[i]=ROTL64(tmp.u[i],13);
+	    u[i+1]^=ROTL64(tmp.u[i],13);
 	  if(i%2==1)
-	    u[i]=ROTR64(tmp.u[i],7);
+	    u[i+1]^=ROTR64(tmp.u[i],7);
+	  if(i%2==0)
+	    u[i]^=ROTL64(tmp.u[i],17);
 	}
+
 	memcpy(tmp.u,u,sizeof(unsigned long long int)*(4));
 	memcpy(key,tmp.d,sizeof(unsigned char)*(32));
 	
