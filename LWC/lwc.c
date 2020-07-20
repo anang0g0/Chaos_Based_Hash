@@ -306,12 +306,13 @@ enc (unsigned char b[2048])
       unsigned long long int u[4]={0};
 
       //generate subkey
+      for(l=0;l<6;l++){
       for(i=0;i<32;i++)
 	rnd[i]=y0[y1[inv[i]]];
       memcpy(y1,rnd,sizeof(unsigned char)*32);
       for(i=0;i<32;i++)
 	key[i]^=Sbox[ROTL8(key[y1[i]],3)];
-
+      }
       memcpy(tmp.u,u,sizeof(unsigned long long int)*(4));
       memcpy(key,tmp.d,sizeof(unsigned char)*(32));
       
@@ -446,12 +447,13 @@ unsigned char y1[32]={20,7,26,9,6,12,8,16,15,22,23,17,29,25,10,24,30,28,27,31,18
       for(k=0;k<16;k++){
 
 	//generate subkey
+	for(l=0;l<6;l++){
 	for(i=0;i<32;i++)
 	  rnd[i]=y0[y1[inv[i]]];
 	memcpy(y1,rnd,sizeof(unsigned char)*32);
 	for(i=0;i<32;i++)
 	  key[i]^=Sbox[ROTL8(key[y1[i]],3)];
-
+	}
 	memcpy(tmp.u,u,sizeof(unsigned long long int)*(4));
 	memcpy(key,tmp.d,sizeof(unsigned char)*(32));
 	
@@ -535,7 +537,7 @@ hash (int argc, char *argv[])
 	  //memset(h.h,0,sizeof(h.h));
 
 	  a = enc (buf);
-	  
+	  /*
 	  for(j=0;j<n;j++)
 	    printf("%02x",a.c[j]);
 	  printf("\n");
@@ -545,7 +547,7 @@ hash (int argc, char *argv[])
       	  for(j=0;j<n;j++)
 	  printf("%c",b.c[j]);
 	  printf("\n");
-	  
+	  */
 	  n = 0;
 	}
     }
