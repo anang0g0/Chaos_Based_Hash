@@ -577,30 +577,30 @@ hash (int argc, char *argv[])
 	  }
 	  
 	  //memset(key,0,sizeof(key));
-	  /*
-	  for(i=0;i<32;i++)
-	  rnd[i]=y0[y1[inv[i]]];
-	memcpy(y1,rnd,sizeof(unsigned char)*32);
 	  
-	for(i=0;i<32;i++)
-	key[i]^=key[rnd[i]];
-	  */
+	  for(i=0;i<32;i++)
+	    rnd[i]=y0[y1[inv[i]]];
+	  memcpy(y1,rnd,sizeof(unsigned char)*32);
+	  
+	  for(i=0;i<32;i++)
+	    key[i]^=key[rnd[i]];
+	  
 	 
 	  
 	a = enc (buf,key);
-	
+	/*
 	  for(j=0;j<n;j++)
 	    printf("%02x",a.c[j]);
 	  printf("\n");
 	  // exit(1);
 	  //memset(key,0,sizeof(key));
 	  //memcpy(key,kkk,sizeof(unsigned char)*32);
-	  
+
 	  b=dec(a.c,key);
       	  for(j=0;j<n;j++)
 	  printf("%c",b.c[j]);
 	  printf("\n");
-	
+	*/
 	  n = 0;
 	}
     }
