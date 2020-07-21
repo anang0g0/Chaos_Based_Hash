@@ -107,7 +107,7 @@ unsigned char key[32]={
     16,60,49,6,43,32,15,26,18,11,
     0,33};
 */
-unsigned char key[32]={0};
+//unsigned char key[32]={0};
 
 
 
@@ -239,7 +239,7 @@ seed (void)
 
 //ハッシュ関数本体
 arrayA
-enc (unsigned char b[2048])
+enc (unsigned char b[2048],unsigned char key[32])
 {
   int i, j ,p= 0;
   arrayA n;
@@ -309,7 +309,7 @@ enc (unsigned char b[2048])
   memcpy (v, f, sizeof (unsigned char) * NN);
   memcpy(tmp.d,key,sizeof(unsigned char)*32);//Sbox[key[z[i]]];
   //バッファを埋める回数だけ回す
-  printf("--------------------------------------------------------begin\n");
+  //printf("--------------------------------------------------------begin\n");
   for (j = 0; j < 2048/NN; j++)
     {
 
@@ -320,7 +320,8 @@ enc (unsigned char b[2048])
       
       //round
       for(k=0;k<10;k++){
-	//鍵スケジューリング（適当）      
+
+	//鍵スケジューリング（適当）
 	for(i=0;i<4;i++){
 	  if(i%3==0)
 	    u[i]=ROTL64(tmp.u[i],13);
@@ -329,17 +330,16 @@ enc (unsigned char b[2048])
 	  if(i%3==2)
 	    u[i]=ROTR64(tmp.u[i],17);
 	}
-	
+	/*
 	for(i=0;i<4;i++){
 	  printf("%llu,",u[i]);
 	  printf("\n");
-	  if(u[i]==14061821610470507203ULL)//4469606172994116635ULL)
+	  if(u[i]==18446744073709551615ULL)
 	    scanf("&d",&p);
 	}
-	
+	*/
 	memcpy(tmp.u,u,sizeof(unsigned long long int)*(4));
-	memcpy(key2,tmp.d,sizeof(unsigned char)*(32));      
-	
+	memcpy(key2,tmp.d,sizeof(unsigned char)*(32));
 	
 	
 	for (i = 0; i < NN; i++)
@@ -386,7 +386,7 @@ enc (unsigned char b[2048])
 
 //ハッシュ関数本体
 arrayA
-dec (unsigned char b[2048])
+dec (unsigned char b[2048],unsigned char key[32])
 {
   int i, j = 0;
   arrayA n;
@@ -413,7 +413,7 @@ dec (unsigned char b[2048])
   FILE *fp, *op;
   int  count = 1;
   time_t t;
-  int k;
+  int k,p;
   unsigned char rnd[32]={0},inv[32]={0};
 
   unsigned char  y0[32]={27,24,23,6,18,12,11,14,4,5,2,29,22,1,3,17,15,21,31,26,19,30,0,8,28,7,20,13,10,25,16,9};
@@ -459,9 +459,10 @@ dec (unsigned char b[2048])
 	w[z[l]]=l;
 
       memcpy (x1, z, sizeof (unsigned char) * NN);
+
       
       //round
-     for(k=0;k<10;k++){
+     for(k=0;k<10;k++){       
       //サブキー
       for(i=0;i<4;i++){
 	if(i%3==0)
@@ -473,11 +474,11 @@ dec (unsigned char b[2048])
       }
       memcpy(tmp.u,u,sizeof(unsigned long long int)*(4));
       memcpy(key1,tmp.d,sizeof(unsigned char)*(32));      
-      
-	for(i=0;i<4;i++){
+
+      for(i=0;i<4;i++){
 	  printf("%llu,",u[i]);
 	  printf("\n");
-	  if(u[i]==14061821610470507203ULL)//4469606172994116635ULL)
+	  if(u[i]==18446744073709551615ULL)
 	    scanf("&d",&p);
 	}
 
@@ -544,7 +545,7 @@ hash (int argc, char *argv[])
     53,35,34,59,7,62,39,50,42,21,
     16,60,49,6,43,32,15,26,18,11,
     0,33};
-
+  unsigned char key[32]={0};
   unsigned char rnd[32]={0},inv[32]={0};
 
   unsigned char  y0[32]={27,24,23,6,18,12,11,14,4,5,2,29,22,1,3,17,15,21,31,26,19,30,0,8,28,7,20,13,10,25,16,9};
@@ -576,16 +577,18 @@ hash (int argc, char *argv[])
 	  }
 	  
 	  //memset(key,0,sizeof(key));
-	for(i=0;i<32;i++)
+	  /*
+	  for(i=0;i<32;i++)
 	  rnd[i]=y0[y1[inv[i]]];
 	memcpy(y1,rnd,sizeof(unsigned char)*32);
+	  
 	for(i=0;i<32;i++)
 	key[i]^=key[rnd[i]];
-
+	  */
 	 
 	  
-	  a = enc (buf);
-	  
+	a = enc (buf,key);
+	/*
 	  for(j=0;j<n;j++)
 	    printf("%02x",a.c[j]);
 	  printf("\n");
@@ -593,11 +596,11 @@ hash (int argc, char *argv[])
 	  //memset(key,0,sizeof(key));
 	  //memcpy(key,kkk,sizeof(unsigned char)*32);
 	  
-	  b=dec(a.c);
+	  b=dec(a.c,key);
       	  for(j=0;j<n;j++)
 	  printf("%c",b.c[j]);
 	  printf("\n");
-	  
+	*/
 	  n = 0;
 	}
     }
@@ -615,8 +618,9 @@ arrayA
   arrayA a = { 0 };
   int i, j;
   arrayA b = { 0 };
-
-  a = enc (u);
+  unsigned char key[32]={0};
+  
+  a = enc (u,key);
   j = 0;
   memset (b.c, 0, sizeof (b.c));
   for (i = 0; i < 2048; i++)
