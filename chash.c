@@ -437,7 +437,7 @@ main (int argc, char *argv[])
   int i, j, n;
   arrayul p;
   array16 t;
-  unsigned char b[NN];
+  unsigned char *b;
   
   if (BYTE)
     {
@@ -451,18 +451,19 @@ main (int argc, char *argv[])
          printf("\n");
        */
       //
-      for(i=0;i<32;i++)
-      scanf("%c",&b[i]);
+      //  for(i=0;i<32;i++)
+      /*
+      scanf("%s",b);
       while(1){
 	p=crand(b);
 	for(i=0;i<NN;i++)
 	  b[i]^=p.d[i];
-	for(i=0;i<NN;i++)
+	for(i=0;i<32;i++)
 	  printf("%d,",b[i]);
 	printf("\n");
       }
       exit(1);
-
+      */
       t = hash (argc, argv);
       //慎ましくここは256ビットだけ
       for (i = 0; i < 16 / 2; i++)
