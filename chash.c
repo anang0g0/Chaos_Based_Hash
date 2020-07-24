@@ -80,8 +80,8 @@ unsigned char inv_x[NN] = { 0 };
 
 unsigned char x1[NN]={49,13,8,28,27,63,2,39,34,46,12,45,41,4,1,42,35,21,50,26,10,47,56,57,11,5,53,14,0,43,29,33,40,36,38,51,20,30,7,6,19,60,3,48,58,23,55,32,59,61,9,16,62,25,31,24,22,54,52,15,18,44,37,17};
 
-unsigned char y0[32]={27,24,23,6,18,12,11,14,4,5,2,29,22,1,3,17,15,21,31,26,19,30,0,8,28,7,20,13,10,25,16,9};
-unsigned char y1[32]={20,7,26,9,6,12,8,16,15,22,23,17,29,25,10,24,30,28,27,31,18,13,19,14,4,1,3,11,0,2,5,21};
+//unsigned char y0[32]={27,24,23,6,18,12,11,14,4,5,2,29,22,1,3,17,15,21,31,26,19,30,0,8,28,7,20,13,10,25,16,9};
+//unsigned char y1[32]={20,7,26,9,6,12,8,16,15,22,23,17,29,25,10,24,30,28,27,31,18,13,19,14,4,1,3,11,0,2,5,21};
 
 
 #define str_length 128
@@ -419,15 +419,13 @@ crand (unsigned char u[NN])
   arrayul b = { 0 };
 
   a = chash (u);
+  //  for(i=0;i<NN;i++)
+  //printf("%d,",a.ar[i]);
+  //  exit(1);
+  
   j = 0;
   memset (b.u, 0, sizeof (b.u));
-  for (i = 0; i < NN; i++)
-    {
-      b.u[j] ^= a.ar[i];
-      b.u[j] = b.u[j] << 8;
-      if (i > 0 && i % 8 == 0)
-	j++;
-    }
+  memcpy(b.d,a.ar,sizeof(unsigned char)*NN);
 
   return b;
 }
@@ -439,7 +437,8 @@ main (int argc, char *argv[])
   int i, j, n;
   arrayul p;
   array16 t;
-
+  unsigned char b[NN];
+  
   if (BYTE)
     {
 
@@ -451,8 +450,20 @@ main (int argc, char *argv[])
          printf("%llx",p.u[i]);
          printf("\n");
        */
-      t = hash (argc, argv);
+      //
+      for(i=0;i<32;i++)
+      scanf("%c",&b[i]);
+      while(1){
+	p=crand(b);
+	for(i=0;i<NN;i++)
+	  b[i]^=p.d[i];
+	for(i=0;i<NN;i++)
+	  printf("%d,",b[i]);
+	printf("\n");
+      }
+      exit(1);
 
+      t = hash (argc, argv);
       //慎ましくここは256ビットだけ
       for (i = 0; i < 16 / 2; i++)
 	printf ("%08x", t.h[i]);
