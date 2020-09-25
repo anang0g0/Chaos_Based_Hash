@@ -250,7 +250,7 @@ chash (unsigned char b[2048])
 
   //デバッグ中なので省略
   for (i = 0; i < NN; i++)
-    //f[i] ^= salt[i];
+    f[i] ^= salt[i];
 
 
   k = 0;
