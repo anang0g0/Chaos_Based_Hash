@@ -272,25 +272,25 @@ chash (unsigned char b[2048])
 	{
 	  
 	  //mode 2(自己書き換え系)
-	  //f[i]^=Sbox[ROTL8(f[x1[i]],3)];//+f[i]];
+	  f[i]^=Sbox[ROTL8(f[x1[i]],3)];
 	  
-	    
+	  //   
 	  //shaの真似(mode 3)
+	  /*
 	  if(i%3==0){
-	    v[i] ^= Sbox[ROTL8 (f[x1[i]], 5)+((i+17)%NN)];
+	    v[i] ^= Sbox[ROTL8 (f[x1[i]], 3)+((i+17)%NN)];
 	  } 
 	  else if(i%11==0){
-	  v[i] ^= invSbox[ROTL8 (f[x1[i]], 7)];//+f[(i+13)%NN]];
+	    v[i] ^= invSbox[ROTL8 (f[x1[i]], 5)];//+f[(i+13)%NN]];
 	  }
 	  else{
-	  v[i] ^= Sbox[ROTL8 (f[x1[i]], 2)+i];//+f[i]];
+	    v[i] ^= Sbox[ROTL8 (f[x1[i]], 7)+i];//+f[i]];
 	  } 
-	  
-	  
+	  */
 	}
       
       //mode 2 の時はここをコメントアウト
-      memcpy (f, v, sizeof (unsigned char) * NN);
+      //memcpy (f, v, sizeof (unsigned char) * NN);
 
       /*
       //print for debugging
