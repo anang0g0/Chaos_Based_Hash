@@ -225,11 +225,11 @@ chash (unsigned char b[2048])
 
   unsigned char salt[NN] = { 0 };	//={ 148, 246, 52, 251, 16, 194, 72, 150, 249, 23, 90, 107, 151, 42, 154, 124, 48, 58, 30, 24, 42, 33, 38, 10, 115, 41, 164, 16, 33, 32, 252, 143, 86, 175, 8, 132, 103, 231, 95, 190, 61, 29, 215, 75, 251, 248, 72, 48, 224, 200, 147, 93, 112, 25, 227, 223, 206, 137, 51, 88, 109, 214, 17, 172};
 
-  unsigned char z[NN], w[NN]={0};
+  unsigned char z[NN];
   unsigned char v[NN] = { 0 }, f[NN] = { 0 };
   unsigned char inv_y[NN];
   FILE *fp, *op;
-  int  count = 1;
+  int  count = 1,w[NN]={0};
   time_t t;
   int k;
 
@@ -270,34 +270,20 @@ chash (unsigned char b[2048])
 
       for (i = 0; i < NN; i++)
 	{
-	  
+	  // for(k=0;k<NN;k++)
+	  v[i]+=abs(f[x1[(i+1)%NN]]-f[x1[i]]);
 	  //mode 2(自己書き換え系)
-	  f[i]^=Sbox[ROTL8(f[x1[i]],3)];
 	  
-	  //   
-	  //shaの真似(mode 3)
-	  /*
-	  if(i%3==0){
-	    v[i] ^= Sbox[ROTL8 (f[x1[i]], 3)+((i+17)%NN)];
-	  } 
-	  else if(i%11==0){
-	    v[i] ^= invSbox[ROTL8 (f[x1[i]], 5)];//+f[(i+13)%NN]];
-	  }
-	  else{
-	    v[i] ^= Sbox[ROTL8 (f[x1[i]], 7)+i];//+f[i]];
-	  } 
-	  */
+	}
+      
+      for (i = 0; i < NN; i++)
+	{
+	  w[count]+=f[i];
 	}
       
       //mode 2 の時はここをコメントアウト
-      //memcpy (f, v, sizeof (unsigned char) * NN);
+      memcpy (f, v, sizeof (unsigned char) * NN);
 
-      /*
-      //print for debugging
-      for(i=0;i<NN;i++)
-	printf("%d,",f[i]);
-      printf("\n");
-      */
 
       if(count < 2048 / NN)
 	{			//k=1;k<2048/NN;k++){
@@ -306,7 +292,7 @@ chash (unsigned char b[2048])
 	    // f[i]^=c.ar[i];
 	  }
 	}
-      
+      printf("w=%d\n",w[count]);      
       count++;
     }
 
