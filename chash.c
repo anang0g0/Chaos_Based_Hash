@@ -260,8 +260,12 @@ chash (unsigned char b[2048])
     f[i] ^= b[i];
 
 
-  memcpy (v, f, sizeof (unsigned char) * NN);
+   memcpy (v, f, sizeof (unsigned char) * NN);
+   for(i=0;i<NN;i++)
+     printf("%d,",f[i]);
+   printf("\n");
 
+   //  exit(1);
   //バッファを埋める回数だけ回す
   for (j = 0; j < 2048/NN; j++)
     {
@@ -275,31 +279,9 @@ chash (unsigned char b[2048])
 	  
 	  //mode 2(自己書き換え系)
 	  f[i]+=abs(Sbox[ROTL8(f[x1[(i+1)%NN]],3)]-Sbox[ROTL8(f[x1[i]],5)]);
+	
 	  
-	  //   
-	  //shaの真似(mode 3)
-	  /*
-	  if(i%3==0){
-	    v[i] ^= Sbox[ROTL8 (f[x1[i]], 3)+((i+17)%NN)];
-	  } 
-	  else if(i%11==0){
-	    v[i] ^= invSbox[ROTL8 (f[x1[i]], 5)];//+f[(i+13)%NN]];
-	  }
-	  else{
-	    v[i] ^= Sbox[ROTL8 (f[x1[i]], 7)+i];//+f[i]];
-	  } 
-	  */
 	}
-      
-      //mode 2 の時はここをコメントアウト
-      //memcpy (f, v, sizeof (unsigned char) * NN);
-
-      /*
-      //print for debugging
-      for(i=0;i<NN;i++)
-	printf("%d,",f[i]);
-      printf("\n");
-      */
 
       if(count < 2048 / NN)
 	{			//k=1;k<2048/NN;k++){
