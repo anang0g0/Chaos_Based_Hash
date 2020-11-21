@@ -1,0 +1,19 @@
+RUNTIME DEPENDENCIES:
+
+	libc
+	libkeccak
+
+
+BUILD DEPENDENCIES:
+
+	coreutils
+	gcc
+	libc
+	libkeccak>=1.2
+	make
+	sed
+
+
+DEPENDENCY SOURCES:
+
+	libkeccak	https://github.com/maandree/libkeccak
