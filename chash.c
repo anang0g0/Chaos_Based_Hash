@@ -191,7 +191,7 @@ chash (unsigned char b[2048])
 
 //ファイル操作
 array16
-hash (char *argv[])
+hash (char *filename)
 {
   int i, k, n;
   array16 h = { 0 };
@@ -201,7 +201,7 @@ hash (char *argv[])
   arrayn a = { 0 };
 
 
-  fp = fopen (argv[1], "rb");
+  fp = fopen (filename, "rb");
   if (fp == NULL)
     {
       printf ("no file\n");
@@ -267,7 +267,7 @@ main (int argc, char *argv[])
     inv_x[x0[i]]=i;
   
   
-  t = hash (argv);
+  t = hash (argv[1]);
   //慎ましくここは256ビットだけ
   for (i = 0; i < 16 / 2; i++)
     printf ("%08x", t.h[i]);
