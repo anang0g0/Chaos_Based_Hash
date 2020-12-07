@@ -97,10 +97,6 @@ unsigned char x1[NN]={0};
 //--------------------ここまで
 
 
-#define str_length 128
-#define password_length 256
-
-unsigned char password[password_length + 1];
 
 
 //言わずと知れたxorshift
@@ -120,56 +116,6 @@ xorshift64 (void)
   x = x ^ (x << 13);
   x = x ^ (x >> 7);
   return x = x ^ (x << 17);
-}
-
-//ゴミのリサイクル
-void
-seed (void)
-{
-  /*
-   * 変数宣言
-   */
-  char str[str_length + 1];
-  time_t t;
-  int i, j, k, rnd;
-  char confirm[2];
-
-  /*
-   * 乱数の初期化
-   */
- 
-  i = 0;
-  while (i < 1000)
-    i++;
-  /*
-   * 乱数生成とパスワードの生成
-   */
-  for (i = 0; i < str_length; i++)
-    {
-      for (j = 0; j < 2; j++)
-	{
-	  k = i * 2 + j;
-	  do
-	    {
-	      rnd = rand ();
-	      password[k] = str[i] + rnd;
-	    }
-	  while (!isalnum (password[k]));
-	}
-    }
-
-  /*
-   * NULL文字の挿入
-   */
-  password[password_length] = '\0';
-
-  /*
-   * パスワードの出力
-   */
-//    printf("生成パスワード：%s",password);
-
-  return;
-
 }
 
 
@@ -209,7 +155,7 @@ chash (unsigned char b[2048])
 
    for(i=0;i<NN;i++)
      printf("%d,",f[i]);
-   printf("\n");
+   printf("\n\n");
 
    //  exit(1);
   //バッファを埋める回数だけ回す
@@ -259,16 +205,15 @@ hash (int argc, char *argv[])
   arrayn a = { 0 }, b = { 0 };
 
 
-  if (BYTE)
-    {
 
       fp = fopen (argv[1], "rb");
-      if (fp == NULL)
+  if (fp == NULL)
 	{
 	  printf ("no file\n");
 	  exit (1);
 	}
-      while ((n = fread (buf, 1, 2048, fp)) > 0)
+
+  while ((n = fread (buf, 1, 2048, fp)) > 0)
 	{
 	  //paddaing
 	  if(n<2048){
@@ -277,11 +222,11 @@ hash (int argc, char *argv[])
 	  }
 	  
 	  //memset(h.h,0,sizeof(h.h));
-	  n = 0;
+	  //n = 0;
 	  a = chash (buf);
 	  for (k = 0; k < NN / 64; k++)
 	    {
-#pragma omp parallel for
+    #pragma omp parallel for
 	      for (i = 64 * k; i < 64 * k + 64; i++)
 		{
 		  h.c[i - 64 * k] ^= a.ar[i];
@@ -289,8 +234,8 @@ hash (int argc, char *argv[])
 	    }
 	  
 	  //      fwrite(h.h,4,16,fp);
-	}
   }
+  
   
 
   return h;   
