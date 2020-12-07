@@ -123,7 +123,6 @@ chash (unsigned char b[2048])
 
   unsigned char z[NN];
   unsigned char f[NN] = { 0 };
-  int  count = 1;
   unsigned char x0[NN]={0};  
   unsigned char inv_x[NN] = { 0 };
   unsigned char x1[NN]={0};
@@ -164,14 +163,11 @@ chash (unsigned char b[2048])
 	  f[x1[i]]+=abs(ROTL8(f[(i+1)%NN],3)-ROTL8(f[i],5));
 	}
 
-      if(count < 2048 / NN)
+      for (i = 0; i < NN; i++)
 	{
-	  for (i = 0; i < NN; i++){
-	    f[i] ^= b[count * NN + i];
-	  }
+	  f[i] ^= b[j * NN + i];
 	}
       
-      count++;
     }
 
   memcpy (n.ar, f, sizeof (unsigned char) * NN);
