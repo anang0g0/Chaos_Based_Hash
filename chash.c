@@ -91,9 +91,6 @@ void rp(unsigned char* a){
 
 //hash関数の鍵----------------------------
 
-unsigned char x0[NN]={0};  
-unsigned char inv_x[NN] = { 0 };
-unsigned char x1[NN]={0};
 //--------------------ここまで
 
 
@@ -131,12 +128,17 @@ chash (unsigned char b[2048])
   unsigned char z[NN];
   unsigned char f[NN] = { 0 };
   int  count = 1;
+  unsigned char x0[NN]={0};  
+  unsigned char inv_x[NN] = { 0 };
+  unsigned char x1[NN]={0};
 
   
+  rp(x0);
+  rp(x1);
+  
   for (i = 0; i < NN; i++)
-    {
       inv_x[x0[i]] = i;
-    }
+    
 
   //デバッグ中なので省略
   //for (i = 0; i < NN; i++)
@@ -258,13 +260,10 @@ main (int argc, char *argv[])
   int i;
   array16 t;
   time_t o;
+
   
   srand (clock () + time (&o));
 
-  rp(x0);
-  rp(x1);
-  for(i=0;i<NN;i++)
-    inv_x[x0[i]]=i;
   
   
   t = hash (argv[1]);
