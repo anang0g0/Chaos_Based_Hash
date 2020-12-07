@@ -128,13 +128,9 @@ chash (unsigned char b[2048])
 
   unsigned char salt[NN] ={ 148, 246, 52, 251, 16, 194, 72, 150, 249, 23, 90, 107, 151, 42, 154, 124, 48, 58, 30, 24, 42, 33, 38, 10, 115, 41, 164, 16, 33, 32, 252, 143, 86, 175, 8, 132, 103, 231, 95, 190, 61, 29, 215, 75, 251, 248, 72, 48, 224, 200, 147, 93, 112, 25, 227, 223, 206, 137, 51, 88, 109, 214, 17, 172};
 
-  unsigned char z[NN], w[NN]={0};
-  unsigned char v[NN] = { 0 }, f[NN] = { 0 };
-  unsigned char inv_y[NN];
-  FILE *fp, *op;
+  unsigned char z[NN];
+  unsigned char f[NN] = { 0 };
   int  count = 1;
-  time_t t;
-  int k;
 
   
   for (i = 0; i < NN; i++)
@@ -147,7 +143,7 @@ chash (unsigned char b[2048])
     //   f[i] ^= salt[i];
 
 
-  k = 0;
+  //  k = 0;
   for (i = 0; i < NN; i++)
     f[i] ^= b[i];
 
@@ -195,49 +191,47 @@ chash (unsigned char b[2048])
 
 //ファイル操作
 array16
-hash (int argc, char *argv[])
+hash (char *argv[])
 {
-  int i, j, k, n;
+  int i, k, n;
   array16 h = { 0 };
 
   unsigned char buf[2048] = { 0 };
   FILE *fp;
-  arrayn a = { 0 }, b = { 0 };
+  arrayn a = { 0 };
 
 
-
-      fp = fopen (argv[1], "rb");
+  fp = fopen (argv[1], "rb");
   if (fp == NULL)
-	{
-	  printf ("no file\n");
-	  exit (1);
-	}
-
+    {
+      printf ("no file\n");
+      exit (1);
+    }
+  
   while ((n = fread (buf, 1, 2048, fp)) > 0)
+    {
+      //paddaing
+      if(n<2048){
+	for(i=n;i<2048;i++)
+	  buf[i]=0xc6;
+      }
+      
+      //memset(h.h,0,sizeof(h.h));
+      //n = 0;
+      a = chash (buf);
+      for (k = 0; k < NN / 64; k++)
 	{
-	  //paddaing
-	  if(n<2048){
-	    for(i=n;i<2048;i++)
-	      buf[i]=0xc6;
-	  }
-	  
-	  //memset(h.h,0,sizeof(h.h));
-	  //n = 0;
-	  a = chash (buf);
-	  for (k = 0; k < NN / 64; k++)
+	  //#pragma omp parallel for
+	  for (i = 64 * k; i < 64 * k + 64; i++)
 	    {
-    #pragma omp parallel for
-	      for (i = 64 * k; i < 64 * k + 64; i++)
-		{
-		  h.c[i - 64 * k] ^= a.ar[i];
-		}
+	      h.c[i - 64 * k] ^= a.ar[i];
 	    }
-	  
-	  //      fwrite(h.h,4,16,fp);
-  }
+	}
+      
+      //      fwrite(h.h,4,16,fp);
+    }
   
   
-
   return h;   
 }
 
@@ -246,15 +240,14 @@ arrayul
 crand (unsigned char u[NN])
 {
   arrayn a = { 0 };
-  int i, j;
   arrayul b = { 0 };
-
+  
   a = chash (u);
   
-  j = 0;
+  //  j = 0;
   memset (b.u, 0, sizeof (b.u));
   memcpy(b.d,a.ar,sizeof(unsigned char)*NN);
-
+  
   return b;
 }
 
@@ -262,27 +255,25 @@ crand (unsigned char u[NN])
 int
 main (int argc, char *argv[])
 {
-  int i, j, n;
-  arrayul p;
+  int i;
   array16 t;
-  unsigned char *b;
-
-
-  srand (clock () + time (&t));
+  time_t o;
+  
+  srand (clock () + time (&o));
 
   rp(x0);
   rp(x1);
   for(i=0;i<NN;i++)
     inv_x[x0[i]]=i;
   
-
-    t = hash (argc, argv);
-    //慎ましくここは256ビットだけ
-    for (i = 0; i < 16 / 2; i++)
-	    printf ("%08x", t.h[i]);
-    printf (" %s", argv[1]);
-    printf ("\n");
-
-
+  
+  t = hash (argv);
+  //慎ましくここは256ビットだけ
+  for (i = 0; i < 16 / 2; i++)
+    printf ("%08x", t.h[i]);
+  printf (" %s", argv[1]);
+  printf ("\n");
+  
+  
   return 0;
 }
