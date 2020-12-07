@@ -24,9 +24,10 @@ typedef union
 } arrayull;
 
 
-typedef struct a4
+typedef union a4
 {
   unsigned char ar[4];
+  unsigned int n;
 } array;
 
 typedef struct a8
@@ -44,14 +45,14 @@ typedef union aN
 {
   unsigned int d[64];
   unsigned long long int u[32];
-  unsigned char ar[NN];
+  unsigned char ar[256];
   //
 } arrayn;
 
 typedef struct pub
 {
   unsigned char a[NN];
-  unsigned char b[NN];
+  unsigned char  b[NN];
 } set;
 
 arrayn c={0};
@@ -63,29 +64,6 @@ arrayn c={0};
 #define U8V(v) ((unsigned char)(v) & U8C(0xFF))
 #define ROTL8(v, n) \
   (U8V((v) << (n)) | ((v) >> (8 - (n))))
-
-
-
-void rp(unsigned char* a){
-  int i,j,x;
-  for(i = 0; i < NN; i++){
-    a[i] = i;
-  }
-  for(i = 0; i < NN - 2; i++){
-    // rand from i+1 to N-1
-    j = (rand() % (NN-1-i)) + i + 1;
-    
-    // swap a[i] and a[j]
-    x = a[j];
-    a[j] = a[i];
-    a[i] = x;
-  }
-  if(a[NN-1] == NN-1){
-    a[NN-1] = a[NN-2];
-    a[NN-2] = NN - 1;
-  }
-}
-
 
 
 
@@ -106,6 +84,29 @@ xorshift64 (void)
   x = x ^ (x << 13);
   x = x ^ (x >> 7);
   return x = x ^ (x << 17);
+}
+
+
+void rp(unsigned char* a){
+ unsigned int i,j,x;
+
+
+ for(i = 0; i < NN; i++)
+    a[i] = i;
+ 
+  for(i = 0; i < NN - 2; i++){
+    // rand from i+1 to N-1
+    j = (xorshift() % (NN-1-i)) + i + 1;
+    
+    // swap a[i] and a[j]
+    x = a[j];
+    a[j] = a[i];
+    a[i] = x;
+  }
+  if(a[NN-1] == NN-1){
+    a[NN-1] = a[NN-2];
+    a[NN-2] = NN - 1;
+  }
 }
 
 
@@ -138,17 +139,15 @@ chash (unsigned char b[2048])
     //   f[i] ^= salt[i];
 
 
-  //  k = 0;
   for (i = 0; i < NN; i++)
     f[i] ^= b[i];
 
-
-
+  /*
    for(i=0;i<NN;i++)
      printf("%d,",f[i]);
    printf("\n\n");
+  */
 
-   //  exit(1);
   //バッファを埋める回数だけ回す
   for (j = 0; j < 2048/NN; j++)
     {
@@ -158,18 +157,15 @@ chash (unsigned char b[2048])
       memcpy (x1, z, sizeof (unsigned char) * NN);
 
       for (i = 0; i < NN; i++)
-	{
-	  
+	{	  
 	  //mode 2(自己書き換え系)
-	  f[x1[i]]+=abs(ROTL8(f[(i+1)%NN],3)-ROTL8(f[i],5));	
-	  
+	  f[x1[i]]+=abs(ROTL8(f[(i+1)%NN],3)-ROTL8(f[i],5));
 	}
 
       if(count < 2048 / NN)
-	{			//k=1;k<2048/NN;k++){
+	{
 	  for (i = 0; i < NN; i++){
 	    f[i] ^= b[count * NN + i];
-	    // f[i]^=c.ar[i];
 	  }
 	}
       
@@ -180,7 +176,6 @@ chash (unsigned char b[2048])
 
 
   return n;
-
 }
 
 
@@ -214,9 +209,8 @@ hash (char *filename)
       a = chash (buf);
       for (k = 0; k < NN / 64; k++)
 	{
-	  //#pragma omp parallel for
-	  for (i = 64 * k; i < 64 * k + 64; i++)
-	      h.c[i - 64 * k] ^= a.ar[i];
+	  for (i = 64/4 * k; i < 64/4 * k + 64/4; i++)
+	      h.h[i - 64/4 * k] ^= a.d[i];
 	}
     }
   
@@ -231,10 +225,10 @@ crand (unsigned char u[NN])
 {
   arrayn a = { 0 };
   arrayul b = { 0 };
+
   
   a = chash (u);
   
-
   memset (b.u, 0, sizeof (b.u));
   memcpy(b.d,a.ar,sizeof(unsigned char)*NN);
   
