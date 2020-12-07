@@ -259,10 +259,10 @@ main (int argc, char *argv[])
 {
   int i;
   array16 t;
-  time_t o;
+  //  time_t o;
 
   
-  srand (clock () + time (&o));
+  //  srand (clock () + time (&o));
 
   
   
