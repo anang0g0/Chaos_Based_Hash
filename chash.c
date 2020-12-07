@@ -7,8 +7,7 @@
 
 #define N 256
 #define NN 64
-#define BYTE 1			//1=hashfile,0=dumpdata
-#define NB 4			/* 128bit 固定として規格されている(データの長さ) */
+#define NB 4  	/* 128bit 固定として規格されている(データの長さ) */
 #define NBb 16
 
 
@@ -79,19 +78,13 @@ void rp(unsigned char* a){
     // swap a[i] and a[j]
     x = a[j];
     a[j] = a[i];
-		a[i] = x;
+    a[i] = x;
   }
   if(a[NN-1] == NN-1){
     a[NN-1] = a[NN-2];
     a[NN-2] = NN - 1;
   }
 }
-
-
-
-//hash関数の鍵----------------------------
-
-//--------------------ここまで
 
 
 
@@ -218,24 +211,19 @@ hash (char *filename)
 	  buf[i]=0xc6;
       }
       
-      //memset(h.h,0,sizeof(h.h));
-      //n = 0;
       a = chash (buf);
       for (k = 0; k < NN / 64; k++)
 	{
 	  //#pragma omp parallel for
 	  for (i = 64 * k; i < 64 * k + 64; i++)
-	    {
 	      h.c[i - 64 * k] ^= a.ar[i];
-	    }
 	}
-      
-      //      fwrite(h.h,4,16,fp);
     }
   
   
   return h;   
 }
+
 
 //蛇足
 arrayul
@@ -246,7 +234,7 @@ crand (unsigned char u[NN])
   
   a = chash (u);
   
-  //  j = 0;
+
   memset (b.u, 0, sizeof (b.u));
   memcpy(b.d,a.ar,sizeof(unsigned char)*NN);
   
@@ -260,11 +248,9 @@ main (int argc, char *argv[])
   int i;
   array16 t;
   //  time_t o;
-
+  
   
   //  srand (clock () + time (&o));
-
-  
   
   t = hash (argv[1]);
   //慎ましくここは256ビットだけ
