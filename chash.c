@@ -9,7 +9,7 @@
 #define NN 64
 #define NB 4  	/* 128bit 固定として規格されている(データの長さ) */
 #define NBb 16
-
+#define SEED 12345678901234567899ULL
 
 typedef union
 {
@@ -69,18 +69,20 @@ arrayn c={0};
 
 //言わずと知れたxorshift
 unsigned int
-xorshift (void)
+xorshift (unsigned long long int u)
 {
   static unsigned int y = 2463534242;
+  y= u ^ y;
   y = y ^ (y << 13);
   y = y ^ (y >> 17);
   return y = y ^ (y << 15);
 }
 
 unsigned long long int
-xorshift64 (void)
+xorshift64 (unsigned long long int u)
 {
   static unsigned long long int x = 88172645463325252ULL;
+  x = x ^ u;
   x = x ^ (x << 13);
   x = x ^ (x >> 7);
   return x = x ^ (x << 17);
@@ -96,7 +98,7 @@ void rp(unsigned char* a){
  
   for(i = 0; i < NN - 2; i++){
     // rand from i+1 to N-1
-    j = (xorshift() % (NN-1-i)) + i + 1;
+    j = (xorshift64(SEED) % (NN-1-i)) + i + 1;
     
     // swap a[i] and a[j]
     x = a[j];
