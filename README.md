@@ -14,6 +14,7 @@
 
 パイコネ変換：https://ja.wikipedia.org/wiki/%E3%83%91%E3%82%A4%E3%81%93%E3%81%AD%E5%A4%89%E6%8F%9B
 
+疑似カオス：https://core.ac.uk/download/pdf/147691564.pdf
 
 # 20210515
 
