@@ -1,4 +1,6 @@
 
+# https://blog.visvirial.com/articles/575
+
 N = 32
  
 # Returns a * b.
