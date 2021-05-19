@@ -3,7 +3,7 @@
 #include <time.h>
 #include <string.h>
 
-#define N 8
+#define N 16
 #define BIT_VERSION
 
 static unsigned char x[N];
@@ -72,7 +72,7 @@ unsigned long long int p_rand()
 	static unsigned char a[N] = {
 		1, 1, 1, 1, 0, 0, 0, 0,
 		//1,1,1,1,1,1,1,1,
-		//0,0,0,0,0,0,0,0,
+		0,0,0,0,0,0,0,0,
 		//0,0,0,0,0,0,0,0,
 		//1,1,1,1,1,1,1,1,
 		//1,1,1,1,1,1,1,1,
@@ -171,15 +171,23 @@ int main()
 	time_t t;
 
 	srand(time(&t));
+
+
 	//printf("%d\n",a);
 	random_permutation(x);
 	random_permutation(y);
+	
+	ku:
 	/*
 		for(i=0;i<N;i++){
 			inv_x[x[i]]=i; 
 		}		
 		printf("\n");
 	*/
+	j=0;
+	count=0;
+	nn=0;
+	v=0;
 	a = p_rand();
 	b = p_rand();
 	while (1)
@@ -188,7 +196,7 @@ int main()
 		d = p_rand();
 		printf(" c=%d d=%d %d\n", c, d, j);
 		if (a == c && b == d)
-		{
+		{		
 			nn++;
 			printf(" f1=%d %d count=%d\n", a, b,(j+1)/nn);
 		}
@@ -197,7 +205,7 @@ int main()
 
 		if (a % 2 == 0)
 			count++;
-		if (j == 0xffff)
+		if (j == 0xffffff)
 		{
 			a = p_rand();
 			printf("f2=%d\n", a);
@@ -222,6 +230,17 @@ int main()
 	*/
 		j++;
 	}
+	if((j+1)/nn>0xffff){
+		for(i=0;i<N;i++)
+		printf("%d,",x[i]);
+		printf(" count x\n");
+		for(i=0;i<N;i++)
+		printf("%d,",y[i]);
+		printf(" count y\n");
+	} //else if(a >0 || b > 0){
+	//	goto ku;
+	//}
+	printf("county %d %d\n",a,b);
 	printf("count f1=%d %d %d\n", count, (j+1)/nn, nn);
 
 	return 0;
