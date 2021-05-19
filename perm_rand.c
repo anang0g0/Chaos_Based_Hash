@@ -173,7 +173,6 @@ int main()
 i=0;
 /*
   fp = fopen("rand.dat", "wb");
-
 while(1){
 n=xor();
 fwrite(&n,4,1,fp);
@@ -203,8 +202,10 @@ for(i=0;i<N;i++)
   w[i]=x0[x1[x2[i]]];
   memcpy(x6,w,sizeof(w));
 
-ke:
 count=0;
+ke:
+
+
 aaa=0;
 for(i=0;i<N;i++){
   if(w[i]==x5[i])
@@ -229,11 +230,12 @@ memcpy(x5,w,sizeof(x1));
     printf("\n");
     if(flg==N)
       break;
-    if(flg==0)
+    if(flg<N)
       count++;
     memcpy(x5,x3,sizeof(x1));
   }
   printf("count1=%d\n",count);
+//exit(1);
 
   memcpy(x1,w,sizeof(w));
 for(i=0;i<N;i++)
