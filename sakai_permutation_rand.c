@@ -3,11 +3,11 @@
 #include <time.h>
 #include <string.h>
 
-#define N 16
+#define N 8
 #define BIT_VERSION
 
-static unsigned char x[N];
-static unsigned char y[N];
+static unsigned char x[N] = {2,7,4,1,5,6,0,3};
+static unsigned char y[N] = {4,0,7,1,6,3,5,2};
 static unsigned char inv_x[N];
 
 unsigned int xor (void)
@@ -66,13 +66,24 @@ unsigned long long int toInt(unsigned char *a)
 	return ret;
 }
 
+unsigned char A[N]={0};
+
+void init_m(){
+int i;
+
+for(i=0;i<N/2;i++)
+  A[i]=1;
+
+}
+
 unsigned long long int p_rand()
 {
+	/*
 #ifdef BIT_VERSION
 	static unsigned char a[N] = {
 		1, 1, 1, 1, 0, 0, 0, 0,
 		//1,1,1,1,1,1,1,1,
-		0,0,0,0,0,0,0,0,
+		//0,0,0,0,0,0,0,0,
 		//0,0,0,0,0,0,0,0,
 		//1,1,1,1,1,1,1,1,
 		//1,1,1,1,1,1,1,1,
@@ -115,7 +126,7 @@ unsigned long long int p_rand()
 		0,
 	};
 #endif
-
+*/
 	//static unsigned char x[N];
 	//static unsigned char y[N];
 	//static unsigned char inv_x[N];
@@ -126,6 +137,7 @@ unsigned long long int p_rand()
 
 	if (first)
 	{
+		/*
 		first = 0;
 
 		//random_permutation(x);
@@ -137,6 +149,7 @@ unsigned long long int p_rand()
 			inv_x[x[i]] = i;
 		}
 		//printf("\n");
+		*/
 	}
 
 	//for(i=0;i<N;i++)
@@ -144,10 +157,10 @@ unsigned long long int p_rand()
 	//printf("\n");
 
 	// a ^= a * y
-	//memcpy(tmp, a, sizeof(tmp)); 	// tmp = a;
+	memcpy(tmp, A, sizeof(tmp)); 	// tmp = a;
 	for (i = 0; i < N; i++)
 	{
-		a[i] ^= a[y[i]];
+		A[i] ^= A[y[i]];
 	}
 
 	// y = x * y * ~x
@@ -157,7 +170,7 @@ unsigned long long int p_rand()
 	}
 	memcpy(y, tmp, sizeof(tmp));
 
-	return toInt(a);
+	return toInt(A);
 }
 
 int main()
@@ -172,18 +185,18 @@ int main()
 
 	srand(time(&t));
 
-
 	//printf("%d\n",a);
-	random_permutation(x);
-	random_permutation(y);
 	
 	ku:
-	/*
-		for(i=0;i<N;i++){
-			inv_x[x[i]]=i; 
-		}		
-		printf("\n");
-	*/
+	//random_permutation(x);
+	//random_permutation(y);
+
+	init_m();
+	for(i=0;i<N;i++){
+			inv_x[x[i]]=i;
+	}
+	printf("\n");
+	
 	j=0;
 	count=0;
 	nn=0;
@@ -200,12 +213,12 @@ int main()
 			nn++;
 			printf(" f1=%d %d count=%d\n", a, b,(j+1)/nn);
 		}
-		if (nn > 2)
+		if (nn > 10)
 			break;
 
 		if (a % 2 == 0)
 			count++;
-		if (j == 0xffffff)
+		if (j == 0xffff)
 		{
 			a = p_rand();
 			printf("f2=%d\n", a);
@@ -230,16 +243,16 @@ int main()
 	*/
 		j++;
 	}
-	if((j+1)/nn>0xffff){
+	if((j+1)/nn>3000){
 		for(i=0;i<N;i++)
 		printf("%d,",x[i]);
 		printf(" count x\n");
 		for(i=0;i<N;i++)
 		printf("%d,",y[i]);
 		printf(" count y\n");
-	} //else if(a >0 || b > 0){
-	//	goto ku;
-	//}
+	} else if(a >0 || b > 0){
+		goto ku;
+	}
 	printf("county %d %d\n",a,b);
 	printf("count f1=%d %d %d\n", count, (j+1)/nn, nn);
 
