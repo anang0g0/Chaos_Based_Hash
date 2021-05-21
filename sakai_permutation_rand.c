@@ -2,13 +2,33 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
+#include <stdint.h>
 
 #define N 8
 #define BIT_VERSION
 
-static unsigned char x[N] = {2,7,4,1,5,6,0,3};
-static unsigned char y[N] = {4,0,7,1,6,3,5,2};
+static unsigned char x[N] = {0};
+//{2,7,4,1,5,6,0,3};
+static unsigned char y[N] = {3, 0, 2, 1};
+//{4,0,7,1,6,3,5,2};
 static unsigned char inv_x[N];
+
+static inline uint32_t rotl32(uint32_t x, int n)
+{
+	// http://blog.regehr.org/archives/1063
+	return x << n | (x >> (-n & 31));
+}
+
+unsigned rotr(unsigned x, unsigned n)
+{
+	return (x >> n % 32) | (x << (32 - n) % 32);
+}
+
+unsigned int bitswap(unsigned int a, int b1, int b2)
+{
+	unsigned int c = (a >> b1 ^ a >> b2) & 1;
+	return (c << b1 | c << b2) ^ a;
+}
 
 unsigned int xor (void)
 {
@@ -66,14 +86,14 @@ unsigned long long int toInt(unsigned char *a)
 	return ret;
 }
 
-unsigned char A[N]={0};
+unsigned char A[N] = {0};
 
-void init_m(){
-int i;
+void init_m()
+{
+	int i;
 
-for(i=0;i<N/2;i++)
-  A[i]=1;
-
+	for (i = 0; i < N / 2; i++)
+		A[i] = 1;
 }
 
 unsigned long long int p_rand()
@@ -131,7 +151,7 @@ unsigned long long int p_rand()
 	//static unsigned char y[N];
 	//static unsigned char inv_x[N];
 	static unsigned char first = 1;
-
+	unsigned int a=0,r;
 	static unsigned char tmp[N];
 	int i;
 
@@ -157,11 +177,32 @@ unsigned long long int p_rand()
 	//printf("\n");
 
 	// a ^= a * y
-	memcpy(tmp, A, sizeof(tmp)); 	// tmp = a;
+	memcpy(tmp, A, sizeof(tmp)); // tmp = a;
+	for (int j = 0; j < N; j++)
+		printf("%d,", tmp[j]);
+	printf("\n");
+	
 	for (i = 0; i < N; i++)
 	{
+		//printf("%d,",A[i]);
 		A[i] ^= A[y[i]];
+		//for (int j = 0; j < N; j++)
+		//	printf("%d,", A[j]);
+		//printf("\n");
 	}
+	a=toInt(A);
+	for (i = 0; i < N; i++)
+	{	r=rand()%N;
+		a=bitswap(a,i,r);
+	}
+
+	//printf("\n");
+	//for (i = 0; i < N; i++)
+	//	printf("%d,", y[i]);
+	//printf("\n");
+	//for (i = 0; i < N; i++)
+	//	printf("%d,", A[i]);
+	//printf("\n");
 
 	// y = x * y * ~x
 	for (i = 0; i < N; i++)
@@ -170,55 +211,60 @@ unsigned long long int p_rand()
 	}
 	memcpy(y, tmp, sizeof(tmp));
 
-	return toInt(A);
+	return a; //toInt(A);
 }
 
 int main()
 {
-	FILE *fp = fopen("out.txt", "wb");
+	FILE *fp = fopen("bin.out", "wb");
 	unsigned int i, j = 0, count = 0, nn = 0;
-	unsigned short a, b, c, d, v = 0;
+	unsigned char a, b, c, d, v = 0;
 	//unsigned char a[4]={0,1,0,1};
 	//unsigned long long int
 
 	time_t t;
 
 	srand(time(&t));
+	i=1;
+	i=bitswap(i,0,31);
+	printf("%x\n",i);
+	//exit(1);
 
-	//printf("%d\n",a);
-	
-	ku:
-	//random_permutation(x);
-	//random_permutation(y);
+ku:
+	random_permutation(x);
+	random_permutation(y);
 
 	init_m();
-	for(i=0;i<N;i++){
-			inv_x[x[i]]=i;
+	for (i = 0; i < N; i++)
+	{
+		inv_x[x[i]] = i;
 	}
-	printf("\n");
-	
-	j=0;
-	count=0;
-	nn=0;
-	v=0;
+	//printf("\n");
+
+	j = 0;
+	count = 0;
+	nn = 0;
+	v = 0;
 	a = p_rand();
+	printf("a=%d\n", a);
+	//exit(1);
 	b = p_rand();
 	while (1)
 	{
-		c = p_rand();
-		d = p_rand();
-		printf(" c=%d d=%d %d\n", c, d, j);
+		c ^= p_rand();
+		d ^= p_rand();
+		printf(" c=%u d=%u %d\n", c, d, j);
 		if (a == c && b == d)
-		{		
+		{
 			nn++;
-			printf(" f1=%d %d count=%d\n", a, b,(j+1)/nn);
+			printf(" f1=%u %u count=%d\n", a, b, (j + 1) / nn);
 		}
-		if (nn > 10)
-			break;
+		//if (nn > 2)
+		//	break;
 
 		if (a % 2 == 0)
 			count++;
-		if (j == 0xffff)
+		if (j == 0xffffff)
 		{
 			a = p_rand();
 			printf("f2=%d\n", a);
@@ -241,20 +287,27 @@ int main()
 			printf("%u\n", a);
 		}
 	*/
+		if(j>100000000)
+		break;
 		j++;
+		c^=d;	
+		fwrite(&c,1,1,fp);
 	}
-	if((j+1)/nn>3000){
-		for(i=0;i<N;i++)
-		printf("%d,",x[i]);
+	if ((j + 1) / nn > 200)
+	{
+		for (i = 0; i < N; i++)
+			printf("%d,", x[i]);
 		printf(" count x\n");
-		for(i=0;i<N;i++)
-		printf("%d,",y[i]);
+		for (i = 0; i < N; i++)
+			printf("%d,", y[i]);
 		printf(" count y\n");
-	} else if(a >0 || b > 0){
+	}
+	else if (a > 0 || b > 0)
+	{
 		goto ku;
 	}
-	printf("county %d %d\n",a,b);
-	printf("count f1=%d %d %d\n", count, (j+1)/nn, nn);
+	printf("county %d %d\n", a, b);
+	printf("count f1=%d %d %d\n", count, (j + 1) / nn, nn);
 
 	return 0;
 }
