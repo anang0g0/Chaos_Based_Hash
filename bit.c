@@ -2,8 +2,10 @@
 #include <time.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
+#include <stdint.h>
 
-#define N 32
+#define N 16
 
 unsigned char A[N] = {0};
 
@@ -51,15 +53,58 @@ unsigned long long int toInt(unsigned char *a)
 	return ret;
 }
 
+static unsigned char x[N] = {0};
+static unsigned char y[N] = {0};
+static unsigned char inv_x[N];
+
+void random_permutation(unsigned char *a)
+{
+	int i, j, x;
+	for (i = 0; i < N; i++)
+	{
+		a[i] = i;
+	}
+	for (i = 0; i < N - 2; i++)
+	{
+		// rand from i+1 to N-1
+		j = (rand() % (N - 1 - i)) + i + 1;
+
+		// swap a[i] and a[j]
+		x = a[j];
+		a[j] = a[i];
+		a[i] = x;
+	}
+	if (a[N - 1] == N - 1)
+	{
+		a[N - 1] = a[N - 2];
+		a[N - 2] = N - 1;
+	}
+}
+
 
 unsigned long long int p_rand()
 {
 	static unsigned int first = 1;
 	unsigned int a=0,r;
 	int i;
+	static unsigned char tmp[N];
+
+
+	memcpy(tmp, A, sizeof(tmp)); 	// tmp = a;
+	for (i = 0; i < N; i++)
+	{
+		A[i] ^= A[y[i]];
+	}
+
+	// y = x * y * ~x
+	for (i = 0; i < N; i++)
+	{
+		tmp[i] = x[y[inv_x[i]]];
+	}
+	memcpy(y, tmp, sizeof(tmp));
 
 	// a ^= a * y
-	a^=toInt(A);
+	a=toInt(A);
 	for (i = 0; i < N; i++)
 	{	r=rand()%N;
 		a=bitswap(a,i,r);
@@ -73,7 +118,7 @@ int main()
 {
 	FILE *fp = fopen("out.dat", "wb");
 	unsigned int i, j = 0, count = 0, nn = 0;
-	unsigned int a, b, c, d, v = 0;
+	unsigned short a, b, c, d, v = 0;
 	//unsigned char a[4]={0,1,0,1};
 	//unsigned long long int
 
@@ -86,6 +131,14 @@ int main()
 	//exit(1);
 
 ku:
+	random_permutation(x);
+	random_permutation(y);
+
+	init_m();
+	for (i = 0; i < N; i++)
+	{
+		inv_x[x[i]] = i;
+	}
 
 	init_m();
 	//printf("\n");
@@ -102,7 +155,7 @@ ku:
 	while (1)
 	{
 		c ^= p_rand();
-		d = p_rand();
+		d ^= p_rand();
 		printf(" c=%u d=%u %d\n", c, d, j);
 		if (a == c && b == d)
 		{
@@ -129,7 +182,7 @@ ku:
 		}
 		j++;
         c^=d;
-    fwrite(&c,4,1,fp);
+    fwrite(&c,2,1,fp);
 	}
     fclose(fp);
 	printf("county %d %d\n", a, b);
