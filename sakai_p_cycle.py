@@ -144,10 +144,10 @@ def timestamp():
 
 timestamp()
 
-x  = Permutation(10,9,8,7)(6,5,4,3)(1,2)
+x  = Permutation(7,6,5,4,3)(1,2)(10,9,8,7)
 timestamp()
 
-n = 6
+n = 32
 y = x**n
 timestamp()
 
@@ -161,6 +161,6 @@ else:
 
 #print(mod_inv(3,5))
 
-# for n in range(1, 20):
+#for n in range(1, 20):
 #     y = x**n
 #     print(y.array_form, y.full_cyclic_form)
