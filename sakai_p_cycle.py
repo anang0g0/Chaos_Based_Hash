@@ -144,10 +144,10 @@ def timestamp():
 
 timestamp()
 
-x  = Permutation(7,6,5,4,3)(1,2)(10,9,8,7)
+x  = Permutation(7,6,5,4,3)(1,2)(10,9,8)(11,12,13,14,15,16,17)
 timestamp()
 
-n = 32
+n = 17
 y = x**n
 timestamp()
 
